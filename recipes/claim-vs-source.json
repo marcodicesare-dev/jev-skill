@@ -1,0 +1,17 @@
+{
+ "claim": {
+  "type": "choice",
+  "instructions": "What does `source` say about this claim: «<the claim, one per question>»?",
+  "criteria": {
+   "supported": {
+    "what": "The source states this claim, or states facts that clearly imply it"
+   },
+   "contradicted": {
+    "what": "The source states something incompatible with this claim"
+   },
+   "not_addressed": {
+    "what": "The source does not say whether this claim is true"
+   }
+  }
+ }
+}

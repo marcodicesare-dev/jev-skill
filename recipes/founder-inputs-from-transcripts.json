@@ -1,0 +1,61 @@
+{
+ "directory_input": {
+  "type": "noul",
+  "instructions": "Does the Founder give an instruction, a decision, a preference or a rejection about Lumina's public hotel directory pages (their design, content, sections, photos, videos, icons, SEO, indexing, page titles, share images or branding)?",
+  "criteria": {
+   "true": "The Founder gives an instruction, a decision, a preference or a rejection about Lumina's public hotel directory pages",
+   "false": "The Founder gives no instruction, decision, preference or rejection about Lumina's public hotel directory pages"
+  }
+ },
+ "area": {
+  "type": "choice",
+  "instructions": "Which area is it about?",
+  "criteria": {
+   "indexing_and_meta": {
+    "what": "Search engine indexing (index or noindex, sitemap), page titles, meta descriptions, canonical or language versions"
+   },
+   "share_images_and_branding": {
+    "what": "The preview shown when a page link is shared (WhatsApp, LinkedIn, X, Facebook), the share image, the favicon or the Lumina branding on the pages"
+   },
+   "hero_and_layout": {
+    "what": "The hero at the top of the page, the navigation bar, the page grid or the overall layout"
+   },
+   "icons": {
+    "what": "Icons, emoji or the icon library"
+   },
+   "personalisation": {
+    "what": "Personalising the page to the reader, for example choosing a type of traveller that changes the text"
+   },
+   "sections_and_copy": {
+    "what": "A content section of a hotel page or its wording: what to expect, rooms, surroundings, a day at the hotel, the Lumina verdict, things to know, what emerges"
+   },
+   "photos": {
+    "what": "Photos on the pages: their choice, style, composition, retouching or generation"
+   },
+   "map": {
+    "what": "The map on the page: its style, filters or points"
+   },
+   "videos": {
+    "what": "Videos on the page, a video library, YouTube or social videos of the hotel"
+   },
+   "reviews": {
+    "what": "Guest reviews, ratings or review-site logos"
+   },
+   "faq_and_index": {
+    "what": "Frequently asked questions or the table of contents at the side of the page"
+   },
+   "footer": {
+    "what": "The footer or the list of sources at the bottom of the page"
+   },
+   "keyword_pages": {
+    "what": "The pages built around a Google search (hotel plus moment), or the demo made by Lumina inside them"
+   },
+   "other_directory": {
+    "what": "Something else about the hotel directory pages or the directory home"
+   },
+   "not_directory": {
+    "what": "Not about the hotel directory pages"
+   }
+  }
+ }
+}

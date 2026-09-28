@@ -1,0 +1,154 @@
+{
+ "guestDesire": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How much desire does the ad create in the guest it is written for?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "decisionUsefulness": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How useful is it for the guest's decision (what they get, why it matters, what to do next)?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "propertyAndPlaceSpecificity": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How specific is it to this property and this place, rather than any luxury hotel?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "audienceResonance": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How well does it resonate with the target guest, without persona labels or over-literal use of research?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "wholeAssetCoherence": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How coherent is the whole ad: do the texts, headlines and description work together as one idea?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "editorialRhythm": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How good is the editorial rhythm: sentence length, flow, no text walls?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "nonRepetition": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How free is it of repetition across texts and headlines (openings, phrases, images)?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "memorableBrandVoice": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How memorable and on-brand is the voice?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "channelFitness": {
+  "type": "score",
+  "instructions": "Judge the candidate ad as a guest-first editor. How well does it fit a Meta ad: scroll-stopping first line, headline compatible with every text, clear call to action?",
+  "criteria": [
+   "1: very poor",
+   "2: very poor",
+   "3: weak",
+   "4: weak",
+   "5: mediocre",
+   "6: mediocre",
+   "7: good",
+   "8: strong",
+   "9: strong",
+   "10: exceptional"
+  ]
+ },
+ "publishReady": {
+  "type": "noul",
+  "instructions": "Could this ad be published as it is, with no hard blocker (misleading offer, invented fact, broken or truncated field, explicit brief violation)?",
+  "criteria": {
+   "true": "Publishable as it is",
+   "false": "Has at least one hard blocker"
+  }
+ }
+}

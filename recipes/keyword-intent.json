@@ -1,0 +1,18 @@
+{
+ "kind": {
+  "type": "choice",
+  "instructions": "What is the person who typed `keyword` looking for?",
+  "criteria": {
+   "guest_need": {
+    "what": "A kind of stay: a hotel defined by a feature, place, occasion, event or venue, without naming a specific hotel or hotel brand",
+    "note": "Examples: a spa hotel in a region, a hotel near an airport, a fair, a stadium or a festival, a family hotel"
+   },
+   "specific_hotel": {
+    "what": "One specific hotel property or hotel brand, named in the keyword — including a generic-sounding phrase that is in fact a hotel's own name, as the search results show"
+   },
+   "not_lodging": {
+    "what": "Something that is not about staying in a hotel"
+   }
+  }
+ }
+}
