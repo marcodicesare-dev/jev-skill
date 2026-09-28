@@ -1,0 +1,54 @@
+:root { color-scheme: light; --paper: #f8f6f0; --ink: #171716; --muted: #66645f; --line: #d9d5cb; --orange: #d94c24; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 18px/1.62 Switzer, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration-color: var(--orange); text-underline-offset: .16em; }
+a:hover { color: var(--orange); }
+a:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.skip { position: absolute; top: -100px; left: 1rem; z-index: 10; padding: .4rem .7rem; background: var(--paper); }
+.skip:focus { top: 1rem; }
+.site-head { display: flex; justify-content: space-between; align-items: center; gap: 2rem; max-width: 1340px; margin: 0 auto; padding: 1.15rem 2rem; border-bottom: 1px solid var(--line); font-size: .85rem; line-height: 1.3; }
+.site-head a { text-decoration: none; }
+.wordmark { font-size: 1rem; font-weight: 700; letter-spacing: -.045em; }
+.site-head nav { display: flex; gap: 1.5rem; }
+main { max-width: 1340px; margin: 0 auto; padding: 0 2rem; }
+.article-head { padding: 6rem 0 3.4rem; }
+h1 { max-width: 1050px; margin: 0; font-size: clamp(3rem, 7vw, 6.5rem); line-height: .99; letter-spacing: -.067em; font-weight: 600; text-wrap: balance; }
+.dek { max-width: 640px; margin: 2rem 0 1.4rem; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.3; letter-spacing: -.025em; }
+.byline { margin: 0; color: var(--muted); font-size: .85rem; }
+article { max-width: 880px; padding-bottom: 5rem; }
+article > p:first-child { width: min(1306px, calc(100vw - 4rem)); max-width: none; margin: 0 0 4rem; }
+article > p:first-child img { display: block; width: 100%; height: auto; border-radius: 3px; }
+article > p, article > ul, article > ol { max-width: 720px; }
+article > p:nth-child(2) { font-size: 1.34rem; line-height: 1.46; letter-spacing: -.014em; }
+article p { margin: 0 0 1.35rem; }
+article h2 { max-width: 720px; margin: 5rem 0 1.25rem; padding-top: .9rem; border-top: 1px solid var(--ink); font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.09; letter-spacing: -.055em; font-weight: 600; text-wrap: balance; }
+article h3 { max-width: 720px; margin: 2.4rem 0 .8rem; font-size: 1.32rem; line-height: 1.2; letter-spacing: -.025em; }
+article strong { font-weight: 700; }
+article ul, article ol { padding-left: 1.45rem; margin-bottom: 1.5rem; }
+article li { padding-left: .25rem; margin: .5rem 0; }
+article li::marker { color: var(--orange); }
+article pre { max-width: 880px; margin: 1.8rem 0 2rem; padding: 1.35rem 1.5rem; overflow-x: auto; background: #20211e; color: #f9f4e8; border-radius: 4px; font: .83rem/1.58 ui-monospace, SFMono-Regular, Menlo, monospace; }
+article :not(pre) > code { background: #eae7df; padding: .1em .22em; border-radius: 2px; font: .88em ui-monospace, SFMono-Regular, Menlo, monospace; }
+article table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1.5rem 0 2.2rem; font-size: .91rem; line-height: 1.45; }
+article th, article td { min-width: 150px; padding: .85rem 1.25rem .85rem 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+article th { font-weight: 700; border-bottom-color: var(--ink); }
+article hr { max-width: 720px; margin: 4rem 0 2rem; border: 0; border-top: 1px solid var(--line); }
+footer { max-width: 1340px; margin: 0 auto; padding: 2.5rem 2rem 4rem; border-top: 1px solid var(--ink); font-size: .86rem; line-height: 1.5; }
+footer p { margin: .2rem 0; }
+footer p:last-child { color: var(--muted); }
+@media (max-width: 700px) {
+  body { font-size: 16px; }
+  .site-head { align-items: flex-start; padding: 1rem 1.2rem; }
+  .site-head nav { gap: .75rem; flex-wrap: wrap; justify-content: flex-end; font-size: .75rem; }
+  main { padding: 0 1.2rem; }
+  .article-head { padding: 3.7rem 0 2rem; }
+  h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
+  .dek { margin: 1.2rem 0 .9rem; }
+  article > p:first-child { width: calc(100vw - 2.4rem); margin-bottom: 2.5rem; }
+  article > p:nth-child(2) { font-size: 1.13rem; }
+  article h2 { margin-top: 3.4rem; }
+  article pre { padding: 1rem; font-size: .72rem; }
+  footer { padding: 2rem 1.2rem 3rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <title>The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens) — Marco Di Cesare</title>
+  <meta name="description" content="A practical guide to Jev and TypeSafe System One after 19,367 successful calls: first API request, five copyable recipes, measured failures, agent patterns, cost and calibration.">
+  <link rel="canonical" href="https://marcodicesare-dev.github.io/jev-skill/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)">
+  <meta property="og:description" content="We ran Jev 19,367 times. The result that changed how we use it was a failure. Read the tested guide and copy a first workflow.">
+  <meta property="og:url" content="https://marcodicesare-dev.github.io/jev-skill/">
+  <meta property="og:image" content="https://marcodicesare-dev.github.io/jev-skill/assets/jev-guide-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/jev-guide-cover.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&amp;display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#article">Skip to the guide</a>
+  <header class="site-head"><a class="wordmark" href="https://marcodicesare-dev.github.io/jev-skill/">Jev, explained.</a><nav aria-label="Main navigation"><a href="https://github.com/marcodicesare-dev/jev-skill">The skill on GitHub ↗</a><a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
+  <main id="article">
+    <header class="article-head"><h1>The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)</h1><p class="dek">The failures, the first call, and the five questions worth stealing.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026 · Independent research</p></header>
+    <article>
+
+<p><img src="assets/jev-guide-cover.png" width="2000" height="825" loading="eager" alt="An illustrated Jev decision at the edge of a larger system" /></p>
+<p>I spent four days trying to work out where Jev actually belongs in an AI system. The count in the title is from our logs: <strong>19,367 successful API responses and 90.4 million metered input tokens</strong>, including retries and reruns. It is the size of the investigation, not a claim that every call was a different experiment. <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/research-scope.md">Here's how I counted it.</a></p>
+<p>The first expensive lesson was a failure. I let Jev choose which source notes an ad writer could see. The writer with <em>all</em> the notes won 13 of 20 comparisons; the writer with Jev's selection won three, and four tied. The apparently clever optimization removed details the writer needed. The next day, Jev helped us search 30,143 utterances of old calls in 108 seconds for $0.32, finding 51 of 54 known instructions while we read only 7% of the windows. Same model. Different job.</p>
+<p>So here is the useful question: <strong>Which small decisions are you currently paying a writing model to make, and which ones should stay with the writer?</strong> This guide gives you an answer you can test in your own workflow, plus the command, question sets and failures we wish we had seen first.</p>
+<h2 id="what-jev-does-in-one-minute">What Jev does in one minute</h2>
+<p>Jev is TypeSafe's <em>decision</em> model. Give it one <code>state</code> (text or a JSON object) and up to 256 focused questions about that same state. It returns one of three typed answers:</p>
+<table>
+<thead>
+<tr>
+<th>Ask for</th>
+<th>Jev returns</th>
+<th>A real use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Choice</strong></td>
+<td>One of the options you defined, with probabilities</td>
+<td>Which prepared support answer fits this message?</td>
+</tr>
+<tr>
+<td><strong>Score</strong></td>
+<td>A position on levels you described in words</td>
+<td>How strongly does this review complain about noise?</td>
+</tr>
+<tr>
+<td><strong>Noul</strong></td>
+<td>A probability for yes/no</td>
+<td>Does this extracted rating appear in its saved source page?</td>
+</tr>
+</tbody>
+</table>
+<p>It does <strong>not</strong> write the support answer, explain a decision, read an image, calculate a total or grant an agent permission. Your code owns the steps and what happens when Jev is wrong. TypeSafe's <a href="https://docs.typesafe.ai/">official documentation</a> is the authority for the current API; the <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/SKILL.md">skill in this repo</a> describes what we measured on our tasks.</p>
+<p>Think about a coding agent that asks a large model “Is this request about billing?” before every reply. If the only legal outcomes are <code>billing</code>, <code>booking</code> and <code>other</code>, the agent may be buying open-ended text generation for a closed choice. Jev can answer that choice while the writing model handles the actual reply. But if the agent is deciding what evidence to show the writer, our ad test says to be careful: a fast filter can make a good writer worse.</p>
+<h2 id="get-one-answer-before-building-a-system">Get one answer before building a system</h2>
+<p>Clone the repo as an agent skill for <a href="https://github.com/marcodicesare-dev/jev-skill">Claude Code</a> or Codex:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/marcodicesare-dev/jev-skill.git ~/.claude/skills/jev</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Or: git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.agents/skills/jev</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LLMAPI_API_KEY</span><span class="op">=</span>...  <span class="co"># set locally; never paste a key into a prompt or commit</span></span></code></pre></div>
+<p>Use <strong>LLM API</strong> for the first call if you are following our experiments: it is the route we used for most of this work and the CLI default. If you have a TypeSafe key, add <code>--via typesafe</code>; we tested that direct route live on 28 September (HTTP 200, <code>jev-1.13.0</code>). OpenRouter is available with <code>--via openrouter</code> and a pinned model version. TypeSafe <a href="https://x.com/typesafeai/status/2104337822350221795">reopened signups on 28 September</a> after a temporary pause. Check its current access and billing terms before following the direct route.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">J</span><span class="op">=</span>~/.claude/skills/jev</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="st">&quot;</span><span class="va">$J</span><span class="st">/tools/jev.py&quot;</span> ask <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--state</span> <span class="st">&#39;{&quot;review&quot;:&quot;The room was quiet, but breakfast was cold.&quot;}&#39;</span> <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--questions</span> <span class="st">&#39;{&quot;noise&quot;:{&quot;type&quot;:&quot;noul&quot;,&quot;instructions&quot;:&quot;Does `review` complain about noise?&quot;,&quot;criteria&quot;:{&quot;true&quot;:&quot;A noise complaint is present&quot;,&quot;false&quot;:&quot;No noise complaint is present&quot;}}}&#39;</span></span></code></pre></div>
+<p>Look at <code>answers.noise.noul</code> and <code>model</code> in the response. The question ID is for your code; the full question belongs in <code>instructions</code>. A probability near 1 means the model strongly leans yes. <strong>It does not mean the answer is right that often on your data.</strong> Our <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/api.md">API reference</a> has exact Choice, Score and Noul shapes, limits and errors.</p>
+<h2 id="the-three-places-i-would-look-first">The three places I would look first</h2>
+<p><strong>1. A repeated closed decision inside an agent.</strong> Find a call that returns a category, score or yes/no, where the available moves are known before the model runs. Have code enumerate the legal options. Ask Jev to pick. Keep a fallback and compare its answers against labelled examples before replacing anything. This is the same construction behind the “Jev plays chess” demonstrations: code supplies legal moves; Jev chooses one. Jev is not calculating chess.</p>
+<p><strong>2. A large collection nobody reads end to end.</strong> Split documents, reviews or transcripts into overlapping pieces. Ask the <em>same</em> narrow question of each piece and read the flagged ones. We found 51 of 54 known instructions in our call archive that way; keyword search found 49, and their union found 53. The win was not that Jev “understood our company.” It turned an archive too big to inspect into a shorter reading queue. Keep keyword search beside it because both missed something.</p>
+<p><strong>3. A claim that should point back to its source.</strong> Save the source text beside every extracted value, then ask whether that specific value is supported, contradicted or absent. In a small incident test, this flagged three invented hotel facts and passed two true controls. One invented rating came from a saved page that was only a 223-character bot check. A simple page-length check should have caught that <em>before</em> Jev ran. The <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/recipes/claim-vs-source.json">claim-versus-source recipe</a> is a starting point, not a universal fact checker; a loose geographic paraphrase still passed in our test.</p>
+<p>If you want your agent to find candidate callsites, <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/AUDIT-YOUR-AGENT.md">paste this audit prompt into it</a>. It asks for code locations, actual frequency and cost, a bounded Jev question, and a shadow comparison. It also permits the right answer: keep the current system.</p>
+<h2 id="the-mistakes-that-mattered-more-than-the-benchmark-wins">The mistakes that mattered more than the benchmark wins</h2>
+<p><strong>Don't let Jev preselect a writer's readable material.</strong> In our 20-ad comparison, the full-context writer won 13–3 with four ties. Jev can check a draft <em>after</em> the writer has used the sources, if the check is a narrow rule. It could help select from an archive that will never fit in the writer's context; it hurt when 44 notes already fit.</p>
+<p><strong>Put the evidence you would inspect into the state.</strong> On 300 labelled hotel search terms, keyword-only classification reached 88.3%. With the top five search results in the state, it reached 98.7%. Those results cost money to fetch and can be noisy. The lesson is to measure the <em>whole evidence path</em>, not celebrate the Jev call alone.</p>
+<p><strong>Write option names as carefully as the descriptions.</strong> We gave a star-rating question five options, then deliberately renamed the keys to contradict their descriptions. Exact answers fell from 27 to 15 of 40. Neutral keys were fine. The <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/api.md">API reference</a> shows the shape; a key is not invisible metadata.</p>
+<p><strong>One text per call; many questions about that text.</strong> When we packed several reviews into one state, 8–34% of answers changed across the tested setups. Packing questions about one review preserved answers in our test and saved about 4× on short reviews. TypeSafe measured a larger saving on a long article; your text length changes the economics. <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/api.md#what-a-call-costs-and-why-batching-saves-less-on-short-texts">See the measurements.</a></p>
+<p><strong>Treat confidence as a ranking until you calibrate it.</strong> In 138 high-probability claim checks, the model's mean stated probability was 98.6%; observed accuracy was 84.8%. We also saw tasks with much smaller gaps. A <code>0.9</code> automation line copied from someone else's recipe has no warrant. Label examples from your workflow and choose the point where mistakes and human review are acceptable.</p>
+<p><strong>A simple injection question is a smoke alarm, not a lock.</strong> Our question caught 120 of 120 obvious planted instructions in reviews. An <a href="https://backnotprop.com/blog/jev-guardrails">independent test</a> found 0% recall on harder attacks at a 1% false-alarm operating point. Code must retain the permission boundary regardless of Jev's answer.</p>
+<h2 id="what-this-could-unlock-if-the-whole-workflow-earns-it">What this could unlock, if the whole workflow earns it</h2>
+<p>The interesting construction is <strong>many cheap, typed decisions around a smaller number of writing steps</strong>. A model writes a plan or answer; Jev checks a concrete property, chooses among approved moves, or routes the uncertain case to a person. The choices can repeat at a pace that makes some old workflows worth reconsidering:</p>
+<ul>
+<li><strong>An archive you can ask new questions of tomorrow.</strong> Tag every review or document with a new semantic question, then count, group or retrieve the matching source records. For a count, calibrate first; summing overconfident probabilities can inflate rare events.</li>
+<li><strong>A brand that remembers corrections.</strong> Turn a human correction into a narrowly worded check over future drafts, and show the reviewer the sentence that triggered it. We tested rule checks in isolation; a continuously learning brand workflow remains a product hypothesis.</li>
+<li><strong>A live interface that reacts to meaning.</strong> A form or support desk could select a prepared next step as a person speaks or types, without waiting for a prose answer at every turn. We measured the speed of the individual decisions; we have not proved a customer interaction works better.</li>
+<li><strong>Pages assembled from approved pieces for a specific need.</strong> We tested one version on 40 hotel searches. A blind model judge preferred 38 assembled pages to a generic hotel homepage, but about a third mixed pieces poorly, the comparison was weak, and no real visitor outcome was measured. The product question remains open.</li>
+</ul>
+<p>These are building hypotheses, not four shipped products. The speed of a brick does not prove the house is useful. Start with the customer job, the current alternative, and a test that can actually tell you the idea was wrong.</p>
+<h2 id="copy-this-before-you-change-a-workflow">Copy this before you change a workflow</h2>
+<pre class="text"><code>1. Name the exact decision and the code that consumes it.
+2. Write the legal answers and the evidence a human would read.
+3. Keep one item in each state; ask related questions together.
+4. Run Jev beside the current path on labelled easy, ambiguous and bad cases.
+5. Compare mistakes, human review, latency and total provider cost.
+6. Change the path only when it wins on the job you actually have.</code></pre>
+<p>The <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/recipes/README.md">five tested question sets</a> and <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/AUDIT-YOUR-AGENT.md">agent audit prompt</a> let you start today. The <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/capabilities.md">capability notes</a> show denominators and limits for the numbers above. If your experiment contradicts ours, send the state shape, question, expected answer and model version in an issue, with private data removed. That would make this guide better than another round of Jev hype.</p>
+<hr />
+<p>Written by <a href="https://x.com/marcodice_ai">Marco Di Cesare</a>. The experiments came from work on <a href="https://www.luminafrontier.ai/?utm_source=github_pages&amp;utm_medium=guide&amp;utm_campaign=jev_skill">Lumina</a>, where we build tools for hotel marketing. More visual notes: <a href="https://www.instagram.com/marcodice.ai/">Instagram</a>. This is an independent guide, not a TypeSafe publication.</p>
+
+    </article>
+  </main>
+  <footer><p>Built while working on <a href="https://www.luminafrontier.ai/?utm_source=github_pages&amp;utm_medium=jev_guide&amp;utm_campaign=jev_skill">Lumina</a>. <a href="https://github.com/marcodicesare-dev/jev-skill">Get the Jev skill</a> · <a href="https://www.instagram.com/marcodice.ai/">Instagram</a> · <a href="https://x.com/marcodice_ai">X</a></p><p>This is an independent guide, not an official TypeSafe publication.</p></footer>
+</body>
+</html>

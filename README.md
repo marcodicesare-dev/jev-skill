@@ -2,7 +2,7 @@
 
 **We ran Jev more than 19,000 times. This is the guide we wish we had before call one.** The [research tally](reference/research-scope.md) records 19,367 successful Jev API responses and 90.4 million metered input tokens in four days of experiments. The useful part is what survived those tests: five copyable recipes, a CLI, failures, and the conditions under which each result held.
 
-Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)**](GUIDE.md) if you want the full story, an honest decision map and a first workflow you can run.
+Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)**](https://marcodicesare-dev.github.io/jev-skill/) if you want the full story, an honest decision map and a first workflow you can run. The [Markdown version](GUIDE.md) lives here in the repo.
 
 [Jev](https://docs.typesafe.ai/) takes a `state` and focused questions and returns typed answers: **Choice** (one option), **Score** (a described scale), or **Noul** (yes/no). It does not write prose. Your code decides what to do with its answers. This repository adds a standard-library Python CLI, five tested question sets, and measurements from real work. It is an independent community project, [not TypeSafe's official skill](https://github.com/typesafe-ai/skills).
 
