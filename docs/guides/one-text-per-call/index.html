@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <title>I tried to make Jev cheaper. Then 34% of its answers changed. — Marco Di Cesare</title>
+  <meta name="description" content="Batch questions about one item without mixing different messages into one state.">
+  <link rel="canonical" href="https://marcodicesare-dev.github.io/jev-skill/guides/one-text-per-call/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I tried to make Jev cheaper. Then 34% of its answers changed.">
+  <meta property="og:description" content="Batch questions about one item without mixing different messages into one state.">
+  <meta property="og:url" content="https://marcodicesare-dev.github.io/jev-skill/guides/one-text-per-call/">
+  <meta property="og:image" content="https://marcodicesare-dev.github.io/jev-skill/assets/guides/one-text-per-call.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="../../assets/jev-guide-cover.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&amp;display=swap">
+  <link rel="stylesheet" href="../../style.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "I tried to make Jev cheaper. Then 34% of its answers changed.", "description": "Batch questions about one item without mixing different messages into one state.", "url": "https://marcodicesare-dev.github.io/jev-skill/guides/one-text-per-call/", "image": "https://marcodicesare-dev.github.io/jev-skill/assets/guides/one-text-per-call.jpg", "author": {"@type": "Person", "name": "Marco Di Cesare", "url": "https://x.com/marcodice_ai"}, "datePublished": "2026-09-28", "publisher": {"@type": "Person", "name": "Marco Di Cesare"}}</script>
+</head>
+<body>
+  <a class="skip" href="#article">Skip to the guide</a>
+  <header class="site-head"><nav aria-label="Main navigation"><a href="https://marcodicesare-dev.github.io/jev-skill/">The ultimate guide</a><a href="https://marcodicesare-dev.github.io/jev-skill/guides/">5 field guides</a><a href="https://github.com/marcodicesare-dev/jev-skill">Get the skill on GitHub ↗</a></nav></header>
+  <main id="article">
+    <header class="article-head"><h1>I tried to make Jev cheaper. Then 34% of its answers changed.</h1><p class="dek">Batch questions about one item without mixing different messages into one state.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026</p></header>
+    <article>
+
+<p><img src="../../assets/guides/one-text-per-call.jpg" width="1983" height="793" loading="eager" alt="A small figure crossing a ridge between pale and blue cliffs" /></p>
+<p>If your agent sorts thousands of messages, it is natural to ask whether you can put many of them into 1 model call. I tried it. Jev returned an answer for every message, and the bill was lower. Nothing crashed.</p>
+<p>Then I sent the same messages separately. On my Italian test, <strong>34%</strong> of Jev's choices changed. On the English version, <strong>28%</strong> changed. The convenient batch had changed the decisions, not just the invoice.</p>
+<p>The fix is a distinction most guides skip: <strong>many questions about 1 message belong together; many different messages need separate inputs.</strong> That still lets Jev save calls. In my test with <strong>12</strong> questions about each review, asking them together used about <strong>4.2× fewer billed input tokens</strong> than asking them 1 by 1, without more decision flips than simply rerunning the same request.</p>
+<h2 id="the-2-things-people-call-batching">The 2 things people call “batching”</h2>
+<p>Picture 1 customer message: “I paid twice and can't log in.” You might want to know which team gets it, whether it asks for a refund and whether it sounds urgent. Those are <strong>3 questions about the same message</strong>. Jev can answer them together because each question reads the same text.</p>
+<p>Now picture <strong>20 different customer messages</strong>. They are <strong>20 separate pieces of evidence</strong>. Stuffing them into 1 large text asks Jev to keep track of which sentence belongs to which customer while it decides. The call can return plausible answers even when that mixing changes them.</p>
+<table>
+<thead>
+<tr>
+<th>What I put in 1 Jev call</th>
+<th>Result in my tests</th>
+<th>What I would do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1 text, many questions</strong></td>
+<td>About <strong>4.2×</strong> fewer billed input tokens for <strong>12</strong> questions on short reviews; decision flips stayed near rerun noise</td>
+<td>Use it</td>
+</tr>
+<tr>
+<td><strong>20 texts, questions for every text</strong></td>
+<td><strong>28–34%</strong> of choices changed against separate calls on the tested intent sets</td>
+<td>Keep each text separate</td>
+</tr>
+</tbody>
+</table>
+<p>TypeSafe's <a href="https://docs.typesafe.ai/primitives">question documentation</a> says questions in a request see the same state and are evaluated independently. That explains why the first pattern works: the message is sent once, then several questions look at it. It does not imply that unrelated messages should be merged into that state.</p>
+<h2 id="a-good-call-and-a-risky-one">A good call and a risky one</h2>
+<p>Here is the shape I would use for the example message. Each question below is a complete Jev question, but you would put the <code>questions</code> object in a file when using the command-line tool:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;state&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;message&quot;</span><span class="fu">:</span> <span class="st">&quot;I paid twice and can&#39;t log in.&quot;</span><span class="fu">},</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;questions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;route&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;choice&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;instructions&quot;</span><span class="fu">:</span> <span class="st">&quot;Which team should receive this message first?&quot;</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;criteria&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;billing&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;what&quot;</span><span class="fu">:</span> <span class="st">&quot;Charges, payments or refunds&quot;</span><span class="fu">},</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;account&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;what&quot;</span><span class="fu">:</span> <span class="st">&quot;Login or account access&quot;</span><span class="fu">},</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;other&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;what&quot;</span><span class="fu">:</span> <span class="st">&quot;Neither of those teams&quot;</span><span class="fu">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;refund&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;noul&quot;</span><span class="fu">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;instructions&quot;</span><span class="fu">:</span> <span class="st">&quot;Does the message ask for a refund?&quot;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;urgent&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;noul&quot;</span><span class="fu">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;instructions&quot;</span><span class="fu">:</span> <span class="st">&quot;Does the message say the customer cannot use the product now?&quot;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>For <code>jev.py</code>, save the <code>questions</code> object in a JSON file and pass the <code>state</code> object with <code>--state</code>. The <a href="https://github.com/marcodicesare-dev/jev-skill">public skill</a> shows the command. The combined JSON above is for reading, not the CLI's file format.</p>
+<p>The risky version would put messages A through T inside the same <code>state</code>, then add question names like <code>route_A</code>, <code>route_B</code> and so on. It looks efficient because the response has all <strong>20</strong> answers. The test that matters is whether each answer agrees with the version where that message stood alone.</p>
+<h2 id="what-i-actually-tested">What I actually tested</h2>
+<p>For the <strong>20-message</strong> test, each message was a short request and Jev faced <strong>59</strong> possible intents. Packing all <strong>20</strong> into 1 state changed <strong>28%</strong> of English decisions and <strong>34%</strong> of Italian decisions versus separate inputs. Accuracy fell by about <strong>10</strong> and <strong>13</strong> percentage points respectively on those sets.</p>
+<p>Other packed-item tests were less dramatic: <strong>5</strong> reviews scored on <strong>10</strong> aspects changed <strong>7.8%</strong> of answers, while <strong>10</strong> reviews given star scores changed <strong>15%</strong>. Packing items did <strong>not</strong> reduce overall accuracy in every test. It did make the answer less stable, and on the larger intent choices it also made it worse.</p>
+<p>I ran a separate test of the useful kind of batching: <strong>40</strong> real reviews, <strong>12</strong> questions per review, <strong>480</strong> decisions. Sending the identical combined request twice changed <strong>5</strong> decisions. Asking the questions separately changed <strong>6</strong>. Reversing their order, changing their IDs and moving their text under different IDs also stayed close to that noise floor. The combined call's median billed input-token saving was <strong>4.16×</strong> compared with <strong>12</strong> separate calls. I put the <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/api.md">cost method and API details</a> in the public skill.</p>
+<p>Why not <strong>12×</strong>? Every separate call repeats a fixed overhead and the review, but the <strong>12</strong> question texts still cost tokens in the combined call. TypeSafe's published example uses a much longer document, so repeating that document is more expensive. My <strong>4.16×</strong> is for short reviews, not a correction to its long-document result.</p>
+<h2 id="let-your-agent-test-the-shortcut">Let your agent test the shortcut</h2>
+<blockquote>
+<p>Find a place in my workflow where Jev answers several questions. Show me the exact <code>state</code> used for each call. If it holds several independent customer messages, reviews or records, split it so each item gets its own call. Keep every question about that same item together. Replay at least 20 labelled items both ways, compare the exact choices, count flips and accuracy, and report billed input tokens and latency. Do not claim a saving until the labels still hold. Run separate-item calls concurrently if I need lower wall-clock time.</p>
+</blockquote>
+<p>You can do this before rewriting your whole agent. Save <strong>20</strong> past inputs and the answers a person would give. Compare:</p>
+<ol type="1">
+<li>Separate item, its questions together.</li>
+<li>The current packed-items version, if you have one.</li>
+<li>An identical rerun, so you know how much variation exists even without changing the layout.</li>
+</ol>
+<p>If the packed version saves money but moves answers you care about, the saving bought a different product behavior.</p>
+<h2 id="the-rule-i-keep">The rule I keep</h2>
+<p>I send <strong>1 item per Jev state</strong> and put all useful questions about that item in the same call. That retained the answers within normal rerun variation in my <strong>40-review</strong> test and saved a median <strong>4.16×</strong> in billed input tokens against separate-question calls. Putting <strong>20</strong> different items into 1 state changed up to <strong>34%</strong> of decisions in the tests I ran.</p>
+<p>Your text length, question count and model version can change the saving. Measure on your own inputs. The part worth remembering is the shape: <strong>share the text across questions; don't make different texts share a decision.</strong></p>
+
+      <nav class="guide-next" aria-label="Next field guide"><a href="../show-the-receipt/">Next: My AI cited a page that proved nothing. →</a></nav>
+    </article>
+  </main>
+  <footer><p><a href="https://github.com/marcodicesare-dev/jev-skill">Get the Jev skill</a> · <a href="https://marcodicesare-dev.github.io/jev-skill/guides/">All 5 field guides</a> · <a href="https://www.luminafrontier.ai/?utm_source=github_pages&amp;utm_medium=field_guide&amp;utm_campaign=jev_skill">Lumina</a> · <a href="https://x.com/marcodice_ai">X</a></p><p>Independent field guide, not an official TypeSafe publication.</p></footer>
+</body>
+</html>

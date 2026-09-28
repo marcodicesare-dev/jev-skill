@@ -67,6 +67,8 @@ Numbers, sources and the full profile: **`reference/capabilities.md`**.
 
 How to design around it: **`reference/patterns.md`**. What went wrong before: **`reference/pitfalls.md`** (read it before any test).
 
+For a real integration, open the matching section of **[`reference/field-guide-playbook.md`](reference/field-guide-playbook.md)**: first routing job, long-archive search, probability thresholds, batching, or claim-versus-source checks. It gives the test to run, the fallbacks and a reader-facing guide for each job. Do not load all 5 when only 1 fits the task.
+
 ## Files
 
 | File | Open it when |
@@ -76,5 +78,6 @@ How to design around it: **`reference/patterns.md`**. What went wrong before: **
 | `reference/capabilities.md` | deciding whether Jev fits a step; quoting a number |
 | `reference/patterns.md` | designing a pipeline, an agent or a check around Jev |
 | `reference/pitfalls.md` | before designing or testing anything |
+| `reference/field-guide-playbook.md` | turning 1 of the 5 field-guide jobs into a shadow test in an agent |
 
 Related skills: `decision-points` (how to design a decision step), `llmapi` (the gateway).

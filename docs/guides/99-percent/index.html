@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <title>Jev said “99% sure.” About 15% of those answers were wrong. — Marco Di Cesare</title>
+  <meta name="description" content="Understand Jev probabilities and test an automation threshold on labelled cases.">
+  <link rel="canonical" href="https://marcodicesare-dev.github.io/jev-skill/guides/99-percent/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Jev said “99% sure.” About 15% of those answers were wrong.">
+  <meta property="og:description" content="Understand Jev probabilities and test an automation threshold on labelled cases.">
+  <meta property="og:url" content="https://marcodicesare-dev.github.io/jev-skill/guides/99-percent/">
+  <meta property="og:image" content="https://marcodicesare-dev.github.io/jev-skill/assets/guides/99-percent.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="../../assets/jev-guide-cover.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&amp;display=swap">
+  <link rel="stylesheet" href="../../style.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Jev said “99% sure.” About 15% of those answers were wrong.", "description": "Understand Jev probabilities and test an automation threshold on labelled cases.", "url": "https://marcodicesare-dev.github.io/jev-skill/guides/99-percent/", "image": "https://marcodicesare-dev.github.io/jev-skill/assets/guides/99-percent.jpg", "author": {"@type": "Person", "name": "Marco Di Cesare", "url": "https://x.com/marcodice_ai"}, "datePublished": "2026-09-28", "publisher": {"@type": "Person", "name": "Marco Di Cesare"}}</script>
+</head>
+<body>
+  <a class="skip" href="#article">Skip to the guide</a>
+  <header class="site-head"><nav aria-label="Main navigation"><a href="https://marcodicesare-dev.github.io/jev-skill/">The ultimate guide</a><a href="https://marcodicesare-dev.github.io/jev-skill/guides/">5 field guides</a><a href="https://github.com/marcodicesare-dev/jev-skill">Get the skill on GitHub ↗</a></nav></header>
+  <main id="article">
+    <header class="article-head"><h1>Jev said “99% sure.” About 15% of those answers were wrong.</h1><p class="dek">Understand Jev probabilities and test an automation threshold on labelled cases.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026</p></header>
+    <article>
+
+<p><img src="../../assets/guides/99-percent.jpg" width="1983" height="793" loading="eager" alt="A small figure on a red plateau beneath a vast apricot sky" /></p>
+<p>Imagine your agent deciding whether to publish a fact, send a message or approve a customer's request. Jev returns an answer with a number near <strong>99%</strong>. It is tempting to say, “That's safe enough; let it act.”</p>
+<p>I checked what that number meant on <strong>210</strong> questions with known answers. Among the <strong>138</strong> answers in the highest probability range, Jev's average top probability was <strong>98.6%</strong>. It was right <strong>84.8%</strong> of the time. Roughly <strong>15%</strong> were wrong despite that impressive-looking number.</p>
+<p>This does not make Jev useless. A higher probability often helps sort the easy cases from the hard ones. It does mean your agent should learn the difference between <strong>“Jev prefers this answer”</strong> and <strong>“this answer is correct 99 times out of 100.”</strong> Here is how I would test that difference before letting an agent act automatically.</p>
+<h2 id="what-the-number-is-in-plain-english">What the number is, in plain English</h2>
+<p>Say Jev chooses among 3 inbox folders: billing, account access and other. Its response gives a probability for each option. It also gives a separate field called <code>confidence</code>, which <a href="https://docs.typesafe.ai/confidence">TypeSafe computes from those probabilities</a>. The confidence field summarizes how strongly 1 option stands out. It is <strong>not</strong> a report of how often Jev has been correct in your inbox.</p>
+<p>For this article, I am discussing the <strong>top option's probability</strong>, not that derived <code>confidence</code> field. Both can be useful for deciding what to inspect next. Neither becomes an observed accuracy rate until you compare it with answers you know are right.</p>
+<p>Think of a weather forecaster who says “90% rain” 100 times. If it rains on 90 of those days, the percentage describes reality well. If it rains on 60, the forecast might still help you compare rainy days with dry ones, but the number is too strong. That comparison is called calibration.</p>
+<h2 id="what-i-measured">What I measured</h2>
+<p>I asked Jev whether a claim was supported by a passage and compared its answer with the labelled result. I grouped answers by their top probability:</p>
+<table>
+<thead>
+<tr>
+<th>Jev's top-probability range</th>
+<th style="text-align: right;">Answers</th>
+<th style="text-align: right;">Average probability</th>
+<th style="text-align: right;">Actually correct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>90–100%</strong></td>
+<td style="text-align: right;"><strong>138</strong></td>
+<td style="text-align: right;"><strong>98.6%</strong></td>
+<td style="text-align: right;"><strong>84.8%</strong></td>
+</tr>
+<tr>
+<td><strong>80–90%</strong></td>
+<td style="text-align: right;"><strong>25</strong></td>
+<td style="text-align: right;"><strong>85.8%</strong></td>
+<td style="text-align: right;"><strong>48.0%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The second row has only <strong>25</strong> examples, so it is noisy. The first is large enough to show why I would not treat a raw <strong>0.99</strong> as permission to publish or pay. Across <strong>10</strong> runs on <strong>5</strong> jobs, Jev's average top probability was above its measured accuracy every time, by <strong>2.9 to 19.6 percentage points</strong>. The <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/capabilities.md">public test summary</a> records the range and the recalibration result.</p>
+<p>At the same time, probability still helped rank cases. On a separate star-rating task, accuracy was <strong>68%</strong> across all items, <strong>82%</strong> among answers above <strong>0.9</strong>, and <strong>87%</strong> above <strong>0.95</strong>. It was better at pointing to easier cases than at naming the exact chance of being right.</p>
+<h2 id="check-your-agent-before-you-choose-a-threshold">Check your agent before you choose a threshold</h2>
+<p>You do not need a statistics degree for the first check:</p>
+<ol type="1">
+<li>Save the model version, question, input, chosen answer and full probabilities for each decision.</li>
+<li>Collect <strong>200–500</strong> real examples if you can, with answers a person checked independently. Keep related versions of the same item together when you split the data.</li>
+<li>Put answers into probability bands such as <strong>0.7–0.8</strong>, <strong>0.8–0.9</strong> and <strong>0.9–1.0</strong>. Count how many were right in each band.</li>
+<li>Decide the acceptable error rate <strong>before</strong> moving the automatic-action line. A mistaken folder is recoverable. A wrong payment or published claim may not be.</li>
+<li>Send the rest to review, and repeat the check when you change the question, evidence or model version.</li>
+</ol>
+<p>If you only have <strong>20</strong> examples, use them to spot obvious failure, not to declare your <strong>0.95</strong> threshold safe. A handful of successes cannot tell you what happens in the rare wrong cases.</p>
+<p>The <a href="https://github.com/marcodicesare-dev/jev-skill">Jev skill</a> includes the API response shape and the dated limitations behind this result. Give your coding agent this job:</p>
+<blockquote>
+<p>Read my logged Jev decisions and the independently checked answers. Separate the top option's probability from the response's <code>confidence</code> field. For each probability band, show sample size, mean probability and actual accuracy. Find the error rate among decisions I would have automated at each proposed threshold. Keep repeated versions of the same item in the same validation group. Do not choose a threshold from the same examples and call it validated; reserve unseen cases for the final check. Tell me which errors would have affected users and which were recoverable.</p>
+</blockquote>
+<h2 id="can-i-repair-the-probabilities">Can I repair the probabilities?</h2>
+<p>Sometimes. I tested a mapping that learns from past labelled answers. On <strong>210</strong> claim checks, one measure of probability error fell from <strong>0.184</strong> to <strong>0.067</strong>. On <strong>936</strong> answers in a multilingual routing test, it fell from <strong>0.154</strong> to <strong>0.067</strong>. I split repeated versions of an item into the same fold so the mapping could not learn from a twin of its test case.</p>
+<p>The repair failed on a smaller <strong>117-answer</strong> slice: error rose from <strong>0.108</strong> to <strong>0.131</strong>. So I would not paste those improved numbers onto a new agent and assume its probabilities are fixed. Gather its own labels, keep a genuinely unseen check set, and leave uncertain or consequential actions to a person or another system.</p>
+<h2 id="the-decision-to-save">The decision to save</h2>
+<p>Jev can tell an agent which answer it favors and which cases look easier. In my <strong>210-item</strong> check, the most confident band averaged <strong>98.6%</strong> probability but achieved <strong>84.8%</strong> accuracy. That gap is big enough to change what I would automate.</p>
+<p>Before your agent treats a probability as permission, count real errors at the threshold you plan to use. Keep the exact input and model version so you can find out why an answer failed. Use the score to prioritize review; earn automatic action with a labelled test on your own job.</p>
+
+      <nav class="guide-next" aria-label="Next field guide"><a href="../one-text-per-call/">Next: I made Jev cheaper. Then 34% of its answers changed. →</a></nav>
+    </article>
+  </main>
+  <footer><p><a href="https://github.com/marcodicesare-dev/jev-skill">Get the Jev skill</a> · <a href="https://marcodicesare-dev.github.io/jev-skill/guides/">All 5 field guides</a> · <a href="https://www.luminafrontier.ai/?utm_source=github_pages&amp;utm_medium=field_guide&amp;utm_campaign=jev_skill">Lumina</a> · <a href="https://x.com/marcodice_ai">X</a></p><p>Independent field guide, not an official TypeSafe publication.</p></footer>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <title>I ran Jev 19,367 times. Here&#x27;s the first job I&#x27;d give it in a new AI agent. — Marco Di Cesare</title>
+  <meta name="description" content="A beginner guide to routing, bounded choices and a labelled shadow test.">
+  <link rel="canonical" href="https://marcodicesare-dev.github.io/jev-skill/guides/first-job/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I ran Jev 19,367 times. Here&#x27;s the first job I&#x27;d give it in a new AI agent.">
+  <meta property="og:description" content="A beginner guide to routing, bounded choices and a labelled shadow test.">
+  <meta property="og:url" content="https://marcodicesare-dev.github.io/jev-skill/guides/first-job/">
+  <meta property="og:image" content="https://marcodicesare-dev.github.io/jev-skill/assets/guides/first-job.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="../../assets/jev-guide-cover.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&amp;display=swap">
+  <link rel="stylesheet" href="../../style.css">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "I ran Jev 19,367 times. Here's the first job I'd give it in a new AI agent.", "description": "A beginner guide to routing, bounded choices and a labelled shadow test.", "url": "https://marcodicesare-dev.github.io/jev-skill/guides/first-job/", "image": "https://marcodicesare-dev.github.io/jev-skill/assets/guides/first-job.jpg", "author": {"@type": "Person", "name": "Marco Di Cesare", "url": "https://x.com/marcodice_ai"}, "datePublished": "2026-09-28", "publisher": {"@type": "Person", "name": "Marco Di Cesare"}}</script>
+</head>
+<body>
+  <a class="skip" href="#article">Skip to the guide</a>
+  <header class="site-head"><nav aria-label="Main navigation"><a href="https://marcodicesare-dev.github.io/jev-skill/">The ultimate guide</a><a href="https://marcodicesare-dev.github.io/jev-skill/guides/">5 field guides</a><a href="https://github.com/marcodicesare-dev/jev-skill">Get the skill on GitHub ↗</a></nav></header>
+  <main id="article">
+    <header class="article-head"><h1>I ran Jev 19,367 times. Here&#x27;s the first job I&#x27;d give it in a new AI agent.</h1><p class="dek">A beginner guide to routing, bounded choices and a labelled shadow test.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026</p></header>
+    <article>
+
+<p><img src="../../assets/guides/first-job.jpg" width="1983" height="793" loading="eager" alt="A painted cliff opening onto a sunlit valley" /></p>
+<p>You launch a startup. Messages start coming in.</p>
+<ul>
+<li>“I paid twice.”</li>
+<li>“Your app crashed.”</li>
+<li>“How much does it cost?”</li>
+</ul>
+<p>Before your AI can answer, it has to make a smaller decision: <strong>who should handle each message?</strong></p>
+<p>That is a Jev job. I give Jev the message and a few possible destinations. It picks 1 and returns probabilities for the options. Code can send the message to the right place. A larger AI writes the reply when a reply is needed.</p>
+<p>I tested Jev across <strong>19,367 successful calls</strong> (<a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/reference/research-scope.md">here's what I counted</a>). The lesson wasn't “give Jev everything.” When I let it choose which notes an AI writer could read, the writing got worse. When I asked it to find instructions buried in <strong>14</strong> recorded meetings, it surfaced <strong>10</strong> that my first search had missed.</p>
+<p>Jev is useful for small decisions you make over and over. It can choose, flag or score. It doesn't write your answer or decide what your business should do. This guide shows how to spot the first suitable job in your own agent and test it before changing your workflow.</p>
+<h2 id="the-job-before-the-job">The job before the job</h2>
+<p>Think of the last customer message you handled. You probably made a decision before writing a word: should I answer it, send it to billing, look up an order, or ignore it?</p>
+<p>An agent makes those decisions too. If each decision becomes a long request to a writing model, you pay for a writer to act as a sorter. Jev is <a href="https://docs.typesafe.ai/primitives">TypeSafe's model for short, defined judgments</a>. You give it the information it needs and a question whose possible answers you specify. It returns an answer your code can use.</p>
+<p>There are 3 question shapes. You don't need their names to understand the jobs:</p>
+<table>
+<thead>
+<tr>
+<th>You ask</th>
+<th>Jev returns</th>
+<th>Everyday example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Which option fits?</td>
+<td>1 of your options, with probabilities</td>
+<td>Billing, account access, or something else?</td>
+</tr>
+<tr>
+<td>Is this statement true of the text?</td>
+<td>A yes probability</td>
+<td>Does this message ask for a refund?</td>
+</tr>
+<tr>
+<td>How far along a scale is it?</td>
+<td>A position on levels you described</td>
+<td>Is this bug minor, serious, or blocking?</td>
+</tr>
+</tbody>
+</table>
+<p>TypeSafe calls those shapes <strong>Choice</strong>, <strong>Noul</strong> and <strong>Score</strong>. Jev cannot verify a bank transaction just because a customer says “I paid twice.” It can say that the message belongs in the billing queue. Checking the payment belongs to the billing system.</p>
+<h2 id="run-1-small-decision">Run 1 small decision</h2>
+<p>My <a href="https://github.com/marcodicesare-dev/jev-skill">open-source Jev skill</a> includes a command-line tool and the question below. Its README explains where to install it for each agent. To try the CLI directly, set your TypeSafe key locally and run this call:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/marcodicesare-dev/jev-skill.git jev-skill</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">TYPESAFE_API_KEY</span><span class="op">=</span>...  <span class="co"># set locally; never paste the real key into a prompt</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">J</span><span class="op">=</span>./jev-skill</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="st">&quot;</span><span class="va">$J</span><span class="st">/tools/jev.py&quot;</span> ask <span class="at">--via</span> typesafe <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--state</span> <span class="st">&#39;{&quot;message&quot;:&quot;I was charged twice and need help.&quot;}&#39;</span> <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--questions</span> <span class="st">&quot;</span><span class="va">$J</span><span class="st">/examples/message-routing.json&quot;</span></span></code></pre></div>
+<p>The question gives Jev <strong>billing</strong>, <strong>account</strong> and <strong>other</strong> as its choices. In a live call on <strong>28 September 2026</strong>, it returned <code>billing</code> in <strong>0.291 seconds</strong> on <code>jev-1.13.0</code>. These are the relevant fields from the actual response:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;model&quot;</span><span class="fu">:</span> <span class="st">&quot;jev-1.13.0&quot;</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;latency_s&quot;</span><span class="fu">:</span> <span class="fl">0.291</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;answers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;route&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;choice&quot;</span><span class="fu">:</span> <span class="st">&quot;billing&quot;</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;probabilities&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;billing&quot;</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span> <span class="dt">&quot;account&quot;</span><span class="fu">:</span> <span class="fl">0.0</span><span class="fu">,</span> <span class="dt">&quot;other&quot;</span><span class="fu">:</span> <span class="fl">0.0</span><span class="fu">}</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>That is 1 working example, not a benchmark of support accuracy. I saved the <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/guides/evidence/first-call.json">complete response without credentials</a> so you can inspect the fields I omitted above.</p>
+<p>The model's answer is only the middle of the workflow. I would let code route the message to billing. I would <strong>not</strong> let this answer issue a refund: Jev has not seen a payment record or received permission to move money.</p>
+<h2 id="find-your-own-first-job">Find your own first job</h2>
+<p>Don't begin by asking, “Where can I use Jev?” Open your agent's last <strong>20</strong> runs and find a decision it keeps making before it does the real work. A good candidate has 4 properties:</p>
+<ol type="1">
+<li><strong>It repeats.</strong> The agent faces it often enough that speed or cost matters.</li>
+<li><strong>The possible answers fit in a short list.</strong> You can write the options before the model sees an example.</li>
+<li><strong>You can show Jev the evidence.</strong> A message, a page, a record or a short passage contains what a person would use to decide.</li>
+<li><strong>A wrong answer is recoverable.</strong> Unclear or consequential cases can go to a person or a stronger system.</li>
+</ol>
+<p>Here is a prompt I would give a coding agent after installing the skill:</p>
+<blockquote>
+<p>Inspect my current workflow and find 1 repeated decision that happens before a larger model writes or reasons. Do not change the workflow yet. Show me 10 real examples, the information a person would need to decide, the exact Jev question and options, and what my code should do with each answer. Include an “other” route. Compare Jev with the current behavior on those 10 labelled examples. Report errors, time and cost. If the decision needs open-ended writing, exact arithmetic, permission to act, or evidence you cannot provide, reject the candidate.</p>
+</blockquote>
+<p>The important line is <strong>“do not change the workflow yet.”</strong> An attractive demo is not evidence that your agent will work better.</p>
+<h2 id="how-i-learned-where-jev-belongs">How I learned where Jev belongs</h2>
+<p>My first money-saving idea was to put Jev in front of an AI writer. Jev chose which of <strong>44</strong> source notes the writer could read. The writer with all the notes won <strong>13</strong> comparisons; the filtered writer won <strong>3</strong>, with <strong>4</strong> inconclusive. The cheaper writing step lost information it needed.</p>
+<p>Then I gave Jev a different job: scan an archive too large to reread and mark short passages that might contain my instructions. In <strong>14</strong> calls, it found passages touching <strong>51 of 54</strong> known instructions. Reading the passages it marked surfaced <strong>10</strong> instructions my earlier search had missed. That run took <strong>108 seconds</strong> and cost <strong>$0.32</strong>. I put the <a href="https://github.com/marcodicesare-dev/jev-skill/blob/main/recipes/README.md">question and reading method in the public skill</a>.</p>
+<p>Those tests teach a practical boundary. If the next step must <em>create</em> an answer or understand a whole body of source material, give that material to a capable writer. If the next step asks <strong>which of these defined things is in this text?</strong>, Jev may be worth testing.</p>
+<h2 id="so-what-should-you-build-first">So what should you build first?</h2>
+<p>Start with 1 decision, 10–20 examples and the answer you would give for each. Run Jev on the same evidence your current agent sees. Count the mistakes before discussing speed or price. If the answer is useful, put code around it: an “other” option, a review path for uncertain cases, and a rule that keeps risky actions out of Jev's hands.</p>
+<p>The inbox example proves a call works; it does not prove a support product is ready. My <strong>19,367</strong> calls include retries and reruns across several tasks, not <strong>19,367</strong> independent experiments. What they gave me was a clearer first question: <strong>what small choice is your agent making again and again, and can you test that choice against real answers?</strong></p>
+
+      <nav class="guide-next" aria-label="Next field guide"><a href="../lost-decisions/">Next: My AI missed 10 things I asked for in 14 team calls. →</a></nav>
+    </article>
+  </main>
+  <footer><p><a href="https://github.com/marcodicesare-dev/jev-skill">Get the Jev skill</a> · <a href="https://marcodicesare-dev.github.io/jev-skill/guides/">All 5 field guides</a> · <a href="https://www.luminafrontier.ai/?utm_source=github_pages&amp;utm_medium=field_guide&amp;utm_campaign=jev_skill">Lumina</a> · <a href="https://x.com/marcodice_ai">X</a></p><p>Independent field guide, not an official TypeSafe publication.</p></footer>
+</body>
+</html>

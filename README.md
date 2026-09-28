@@ -38,6 +38,18 @@ This example asks which team should see a customer message first. Read `answers.
 
 If you already have an AI agent, copy the [workflow audit prompt](AUDIT-YOUR-AGENT.md). It finds candidate decisions in your code and sets up a shadow comparison before any replacement.
 
+## 5 field guides you can hand to an agent
+
+Each guide starts with a problem I hit, shows the result and gives an assignment you can paste into your own agent. The [field-guide playbook](reference/field-guide-playbook.md) is the shorter operational version for an agent already using this skill.
+
+1. [I ran Jev 19,367 times. Here's the first job I'd give it in a new AI agent.](guides/first-job.md) — route a message before asking a larger AI to reply.
+2. [My AI read 14 team calls and missed 10 things I asked for. Jev found them.](guides/lost-decisions.md) — recover decisions from an archive without losing the source passage.
+3. [Jev said “99% sure.” About 15% of those answers were wrong.](guides/99-percent.md) — choose an action threshold from checked examples.
+4. [I tried to make Jev cheaper. Then 34% of its answers changed.](guides/one-text-per-call.md) — batch questions about 1 item without mixing unrelated items.
+5. [My AI cited a page that proved nothing. I made Jev check it.](guides/show-the-receipt.md) — verify an extracted fact against the page it came from.
+
+Read them on the [illustrated guide site](https://marcodicesare-dev.github.io/jev-skill/guides/) or as Markdown here. The covers are environmental paintings; the results stay in native tables and code, with test limits stated beside them.
+
 ## What I tested
 
 These are **September 2026 results on my tasks**, not general Jev benchmarks. Denominators and limits are in [capabilities](reference/capabilities.md), the [recipe index](recipes/README.md), and the [research tally](reference/research-scope.md).

@@ -142,6 +142,7 @@ I started with a simple plan to make my writer cheaper. That plan made the writi
 **That is the test I would run this week:** find 1 small decision your agent makes again and again. Run both approaches on real examples. Keep Jev if the whole job gets better. If it does not, you have found another useful boundary.
 
 - [Get the skill, CLI and test data](README.md)
+- [Read 5 practical field guides](guides/README.md)
 - [Use the agent audit prompt](AUDIT-YOUR-AGENT.md)
 - [Read TypeSafe's official skill](https://github.com/typesafe-ai/skills)
 

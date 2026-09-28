@@ -7,6 +7,7 @@ Requires pandoc. The generated HTML is committed so Pages needs no build tooling
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,7 +61,7 @@ def main() -> None:
 </head>
 <body>
   <a class="skip" href="#article">Skip to the guide</a>
-  <header class="site-head"><nav aria-label="Main navigation"><a href="{REPO}">The skill on GitHub ↗</a><a href="{REPO}/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
+  <header class="site-head"><nav aria-label="Main navigation"><a href="guides/">5 field guides</a><a href="{REPO}">The skill on GitHub ↗</a><a href="{REPO}/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
   <main id="article">
     <header class="article-head"><h1>{TITLE}</h1><p class="dek">I made my AI writer 37% cheaper. The ads got worse, 13–3. Then Jev found 51 of 54 buried instructions for $0.32.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026</p></header>
     <article>
@@ -73,6 +74,7 @@ def main() -> None:
 '''
     OUTPUT.parent.mkdir(exist_ok=True)
     OUTPUT.write_text(head)
+    subprocess.run([sys.executable, str(ROOT / 'scripts' / 'build-field-guides.py')], check=True)
 
 
 if __name__ == "__main__":

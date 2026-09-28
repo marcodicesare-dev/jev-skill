@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "via": "typesafe",
+  "latency_s": 0.291,
+  "cost_usd": 1.6547999999999998e-05,
+  "model": "jev-1.13.0",
+  "answers": {
+    "route": {
+      "type": "choice",
+      "choice": "billing",
+      "confidence": 1.0,
+      "probabilities": {
+        "other": 0.0,
+        "billing": 1.0,
+        "account": 0.0
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 394,
+    "output_tokens": 38
+  }
+}
