@@ -29,14 +29,15 @@ Clone the repo as an agent skill for [Claude Code](https://github.com/marcodices
 ```bash
 git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.claude/skills/jev
 # Or: git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.agents/skills/jev
-export LLMAPI_API_KEY=...  # set locally; never paste a key into a prompt or commit
+export TYPESAFE_API_KEY=...  # set locally; never paste a key into a prompt or commit
 ```
 
-Use **LLM API** for the first call if you are following our experiments: it is the route we used for most of this work and the CLI default. If you have a TypeSafe key, add `--via typesafe`; we tested that direct route live on 28 September (HTTP 200, `jev-1.13.0`). OpenRouter is available with `--via openrouter` and a pinned model version. TypeSafe [reopened signups on 28 September](https://x.com/typesafeai/status/2104337822350221795) after a temporary pause. Check its current access and billing terms before following the direct route.
+The example below uses the direct TypeSafe route, tested live on 28 September (HTTP 200, `jev-1.13.0`). The CLI defaults to LLM API if you omit `--via typesafe`, because that gateway handled most of our experiments; that route needs `LLMAPI_API_KEY`. OpenRouter is available with `--via openrouter` and a pinned model version. TypeSafe [reopened signups on 28 September](https://x.com/typesafeai/status/2104337822350221795) after a temporary pause. Check current access and billing terms before using any route.
 
 ```bash
 J=~/.claude/skills/jev
 python3 "$J/tools/jev.py" ask \
+  --via typesafe \
   --state '{"review":"The room was quiet, but breakfast was cold."}' \
   --questions '{"noise":{"type":"noul","instructions":"Does `review` complain about noise?","criteria":{"true":"A noise complaint is present","false":"No noise complaint is present"}}}'
 ```

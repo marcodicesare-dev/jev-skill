@@ -11,21 +11,22 @@ Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90M Tokens)**](h
 ```bash
 git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.claude/skills/jev  # Claude Code
 git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.agents/skills/jev  # Codex and others
-export LLMAPI_API_KEY=...  # or OPENROUTER_API_KEY for the optional pinned route
+export TYPESAFE_API_KEY=...  # set locally; never paste a real key into a prompt or commit
 ```
 
-Do not put keys in prompts or source control. Then ask your agent: **“Use the Jev skill to find one repeated, bounded decision in this workflow. Show me the question, the state, and a small labelled test before changing the workflow.”** Python 3 and an API key are enough to use the CLI; there are no package dependencies.
+Then ask your agent: **“Use the Jev skill to find one repeated, bounded decision in this workflow. Show me the question, the state, and a small labelled test before changing the workflow.”** Python 3 and an API key are enough to use the CLI; there are no package dependencies. You can also install [TypeSafe's official skill](https://github.com/typesafe-ai/skills) with `npx skills add typesafe-ai/skills --skill typesafe-ai`; use its live documentation for current provider behavior.
 
 ## First Jev API call
 
 ```bash
 J=~/.claude/skills/jev  # adjust to your install path
 python3 "$J/tools/jev.py" ask \
+  --via typesafe \
   --state '{"review":"The room was quiet, but breakfast was cold."}' \
   --questions '{"noise":{"type":"noul","instructions":"Does `review` complain about noise?","criteria":{"true":"A noise complaint is present","false":"No noise complaint is present"}}}'
 ```
 
-The response includes `answers.noise.noul`, the model name, latency and estimated cost. The CLI uses the LLM API gateway by default because that is where most of our experiments ran. `--via typesafe` uses the official endpoint with a TypeSafe API key (**live tested: HTTP 200, jev-1.13.0, 28 September**). `--via openrouter` selects a version-pinned route. TypeSafe [reopened new signups on 28 September](https://x.com/typesafeai/status/2104337822350221795) after a temporary pause. Read [API and route details](reference/api.md) before integrating Jev into an application; check [TypeSafe's live documentation](https://docs.typesafe.ai/) for current contracts and limits.
+The response includes `answers.noise.noul`, the model name, latency and estimated cost. `--via typesafe` uses the official endpoint with a TypeSafe API key (**live tested: HTTP 200, jev-1.13.0, 28 September**). Without a route flag, the CLI uses the LLM API gateway because that is where most of our experiments ran; it needs `LLMAPI_API_KEY`. `--via openrouter` selects a version-pinned route. TypeSafe [reopened new signups on 28 September](https://x.com/typesafeai/status/2104337822350221795) after a temporary pause. Read [API and route details](reference/api.md) before integrating Jev into an application; check [TypeSafe's live documentation](https://docs.typesafe.ai/) for current contracts and limits.
 
 ## Choose the right job
 

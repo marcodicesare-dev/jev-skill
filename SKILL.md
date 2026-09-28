@@ -19,7 +19,9 @@ Before building, read the relevant current [TypeSafe documentation](https://docs
 
 ```bash
 J=~/.claude/skills/jev            # or wherever you installed this folder (Codex: ~/.agents/skills/jev)
+export TYPESAFE_API_KEY=...        # configure locally; never put a real key in source control
 python3 $J/tools/jev.py ask \
+  --via typesafe \
   --state '{"text": "Colazione ottima, ma la camera dava sulla strada e di notte era rumorosa."}' \
   --questions '{"noise": {"type": "noul", "instructions": "Does the guest complain about noise?",
                           "criteria": {"true": "The guest complains about noise", "false": "No complaint about noise"}},

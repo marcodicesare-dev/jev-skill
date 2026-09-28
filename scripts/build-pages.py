@@ -35,7 +35,6 @@ def main() -> None:
         "utm_source=github&amp;utm_medium=guide",
         "utm_source=github_pages&amp;utm_medium=guide",
     )
-    rendered = rendered.replace("<h1\n", "<h1\n", 1)
     rendered = re.sub(r"<h1\b[^>]*>.*?</h1>", "", rendered, count=1, flags=re.S)
     head = f'''<!doctype html>
 <html lang="en">
