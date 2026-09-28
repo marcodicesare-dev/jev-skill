@@ -21,7 +21,7 @@
 
 **Evidence in the state.** Put what a human would look at into the state (top search results, the page, the record). Keywords: 88 % alone, 99 % with the Google results.
 
-**Guard.** Whenever the state is written by strangers (reviews, emails, pages, comments), add a Noul asking whether it contains instructions for an AI.
+**Injection triage.** When the state is written by strangers (reviews, emails, pages, comments), a Noul can flag obvious instructions for review. It caught our planted strings but missed the hard attacks in an independent benchmark at a strict false-alarm rate. Keep tool permissions and data boundaries in code regardless of its answer.
 
 **Agent inside code.** Route → extract → route again → extract → score, each step a Jev call over the pages the code fetched. The directory agent ran this way at 1.6 s of decisions per hotel.
 
@@ -39,7 +39,7 @@
 
 ## The pattern that failed: the eyes
 
-Letting Jev choose what the author reads (sources, facts, photos) before the author writes. It saves money on the writer's input and makes the writing worse (13–3 against the full context). Jev can check the author's output and pick among closed options the author does not own (a destination page among real ones, a library photo), but it must not narrow the author's context.
+Letting Jev choose what the author reads (sources, facts, photos) before the author writes. In our test where all 44 notes fit, it saved money on the writer's input and made the writing worse (13–3 against full context, four ties). Jev can check the author's output or triage an archive too large to read in one call. Do not narrow a writer's already readable context without comparing the resulting work.
 
 ## A worked example: the content engine
 

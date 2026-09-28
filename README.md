@@ -1,41 +1,71 @@
-# jev-skill
+# Jev skill for Claude Code, Codex and other coding agents
 
-**A skill that teaches your coding agent to use Jev, measured on real work.**
+**We ran Jev more than 19,000 times. This is the guide we wish we had before call one.** The [research tally](reference/research-scope.md) records 19,367 successful Jev API responses and 90.4 million metered input tokens in four days of experiments. The useful part is what survived those tests: five copyable recipes, a CLI, failures, and the conditions under which each result held.
 
-[Jev](https://docs.typesafe.ai) is TypeSafe's decision model. It never writes: it answers closed questions about a text (a choice among options, a score on described levels, a yes/no) with a probability, in about a quarter of a second, for $0.042 per million input tokens.
+Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)**](GUIDE.md) if you want the full story, an honest decision map and a first workflow you can run.
 
-We put Jev to work on a real hotel-marketing stack in September 2026: ads, reviews, keywords, call transcripts, a hotel directory. This skill is what we learned, written for Claude Code, Codex and any agent that reads skills. Say **"use Jev"** and the agent knows how to call it, what it is good and bad at (with numbers), which question sets are already tested, and which mistakes we already made for you.
+[Jev](https://docs.typesafe.ai/) takes a `state` and focused questions and returns typed answers: **Choice** (one option), **Score** (a described scale), or **Noul** (yes/no). It does not write prose. Your code decides what to do with its answers. This repository adds a standard-library Python CLI, five tested question sets, and measurements from real work. It is an independent community project, [not TypeSafe's official skill](https://github.com/typesafe-ai/skills).
 
-## Install
+## Install the Jev agent skill
 
 ```bash
-git clone https://github.com/marcodicesare-dev/jev-skill ~/.claude/skills/jev     # Claude Code
-git clone https://github.com/marcodicesare-dev/jev-skill ~/.agents/skills/jev     # Codex and others
-export LLMAPI_API_KEY=...        # or OPENROUTER_API_KEY for a pinned model version
+git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.claude/skills/jev  # Claude Code
+git clone https://github.com/marcodicesare-dev/jev-skill.git ~/.agents/skills/jev  # Codex and others
+export LLMAPI_API_KEY=...  # or OPENROUTER_API_KEY for the optional pinned route
 ```
 
-## What is inside
+Do not put keys in prompts or source control. Then ask your agent: **“Use the Jev skill to find one repeated, bounded decision in this workflow. Show me the question, the state, and a small labelled test before changing the workflow.”** Python 3 and an API key are enough to use the CLI; there are no package dependencies.
 
-| File | What it gives your agent |
+## First Jev API call
+
+```bash
+J=~/.claude/skills/jev  # adjust to your install path
+python3 "$J/tools/jev.py" ask \
+  --state '{"review":"The room was quiet, but breakfast was cold."}' \
+  --questions '{"noise":{"type":"noul","instructions":"Does `review` complain about noise?","criteria":{"true":"A noise complaint is present","false":"No noise complaint is present"}}}'
+```
+
+The response includes `answers.noise.noul`, the model name, latency and estimated cost. The CLI uses the LLM API gateway by default because that is where most of our experiments ran. `--via typesafe` uses the official endpoint with a TypeSafe API key (**live tested: HTTP 200, jev-1.13.0, 28 September**). `--via openrouter` selects a version-pinned route. TypeSafe [reopened new signups on 28 September](https://x.com/typesafeai/status/2104337822350221795) after a temporary pause. Read [API and route details](reference/api.md) before integrating Jev into an application; check [TypeSafe's live documentation](https://docs.typesafe.ai/) for current contracts and limits.
+
+## Choose the right job
+
+| Good candidate | Keep elsewhere |
 |---|---|
-| `SKILL.md` | when to use Jev and when not, six rules, a one-minute call |
-| `reference/api.md` | the request, the three question types, what a call really costs, the errors we met |
-| `reference/capabilities.md` | what Jev did on each job, with the numbers |
-| `reference/patterns.md` | designs that worked (and one that failed), and how to test a new use |
-| `reference/pitfalls.md` | thirteen mistakes that cost us time or a wrong conclusion |
-| `recipes/` | tested question sets: keyword intent, review stars with an injection guard, ad quality, instructions in call transcripts, claims against their source |
-| `tools/jev.py` | a small CLI: `ask`, `batch`, `--via openrouter` |
+| Route a ticket, classify a review, score a defined quality dimension, check whether a source supports a claim | Write copy, explain a judgment, calculate an exact value, grant permissions or choose what a writer reads when all source material fits |
 
-## Five things we measured that we have not seen published elsewhere
+**The operating shape:** collect the evidence a person would inspect → ask narrow questions about one item → let code apply the answer → send uncertain or consequential cases to review. Read [patterns](reference/patterns.md) for the design and [pitfalls](reference/pitfalls.md) before setting thresholds.
 
-1. Letting Jev choose what a writer model reads made the writing worse when everything fit (13 losses to 3), and found 51 of 54 needles when it could not fit (30,143 utterances, 7 % read).
-2. Packing several texts into one call changes 8–34 % of answers; packing many questions about one text changes nothing.
-3. Jev reads your option names: a name that contradicts its description cut exact star ratings from 27 to 15 of 40.
-4. Jev orders good, flat, poor and broken versions of an ad right 30 times out of 30, but picks at chance among versions that are all good.
-5. Probabilities are overconfident by 3–20 points on every task we measured: recalibrate before any threshold.
+If you already have an AI agent, copy the [workflow audit prompt](AUDIT-YOUR-AGENT.md). It finds candidate decisions in your code and sets up a shadow comparison before any replacement.
 
-## Honest limits
+## What we tested
 
-Our tests are ours: hotel marketing, English and Italian, jev-1.13, September 2026. Treat every threshold as a starting point for your own labelled cases. Not affiliated with TypeSafe.
+These are **our September 2026 results on our tasks**, not general Jev benchmarks. Denominators and limits are in [capabilities](reference/capabilities.md), the [recipe index](recipes/README.md), and the [research tally](reference/research-scope.md).
 
-Maintained by Marco Di Cesare ([Lumina](https://www.luminafrontier.ai)). MIT licence.
+| Finding | Measured result | Practical lesson |
+|---|---:|---|
+| Let Jev select source notes for an ad writer when the writer could read them all | Full-context ads won 13 comparisons; filtered ads won 3, with 4 ties | Do not filter a writer's material by default. |
+| Search 30,143 call utterances for known founder instructions | 51 of 54 found with Jev while reading 7% of windows; keyword search found 49 | Use Jev alongside search when the corpus is too large to read whole. |
+| Give keyword classification the top five search results | 88.3% → 98.7% accuracy on 300 labelled keywords | Put the evidence a human would check into the state. |
+| Reword a Score option so its name contradicted its description | Exact star ratings fell from 27 to 15 of 40 | Option names are part of the question. |
+| Compare four quality levels of the same ad | Correct ordering on 30 of 30; near chance among four good variants | Test with real contrasts before calling a judge useful or useless. |
+| Check probability against observed accuracy | Top band: 98.6% stated, 84.8% right across 138 claim checks | Calibrate on labelled cases before automatic pass lines. |
+
+The [five recipes](recipes/README.md) cover keyword intent, review stars and an injection flag, ad quality, transcript search, and claim-versus-source checks. Each recipe declares its required state and test. The injection flag caught simple planted strings, but it is **not** a security boundary.
+
+## Jev guide by task
+
+- **Jev API and Python example:** [request and response shape, routes, limits](reference/api.md)
+- **Jev with Claude Code or Codex:** [skill instructions](SKILL.md) and the install command above
+- **Where Jev belongs in an existing agent:** [copyable workflow audit](AUDIT-YOUR-AGENT.md)
+- **Choice, Score and Noul questions:** [API reference](reference/api.md) and [tested recipes](recipes/README.md)
+- **Classification, routing, scoring and LLM-as-judge:** [capabilities](reference/capabilities.md) and [patterns](reference/patterns.md)
+- **RAG evidence checks and hallucinated extracted facts:** [claim-versus-source recipe](recipes/claim-vs-source.json) and its [measured limits](recipes/README.md)
+- **Cost, latency, confidence and calibration:** [API notes](reference/api.md), [field results](reference/capabilities.md), [pitfalls](reference/pitfalls.md)
+
+For new model versions, providers and SDK features, prefer [TypeSafe's official docs](https://docs.typesafe.ai/) and [official skill](https://github.com/typesafe-ai/skills). Our dated experiments are useful evidence, not a substitute for checking current behavior.
+
+## Who made this
+
+Built and maintained by [Marco Di Cesare](https://x.com/marcodice_ai) while working on [Lumina, an AI-native platform for hotel marketing](https://www.luminafrontier.ai/?utm_source=github&utm_medium=readme&utm_campaign=jev_skill). I share the visual side of the work on [Instagram](https://www.instagram.com/marcodice.ai/) and the experiments on [X](https://x.com/marcodice_ai).
+
+This is independent research, not affiliated with TypeSafe. MIT licensed. If a recipe fails on your labelled cases, open an issue with the state shape, question, expected outcome and model version; remove private data first.

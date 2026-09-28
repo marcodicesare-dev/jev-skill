@@ -80,10 +80,10 @@ TypeSafe's own rules (their agent skill, v0.5.7), with what we measured on them:
 |---|---|---|---|
 | **LLM API** (default) | `POST https://api.llmapi.ai/v1/systemone` · `LLMAPI_API_KEY` · `jev-latest` only | lab work, scripts, agents | 5,000 requests/min per account (raised 25 Sep 2026; header `X-Ratelimit-Limit-Requests`); no version pinning; answers computed in the USA; no published data-processing agreement |
 | **OpenRouter** | `POST https://openrouter.ai/api/v1/systemone` · `OPENROUTER_API_KEY` · `typesafe/jev-1.13` (pinned; `~typesafe/jev-latest` tracks the newest) | anything that needs a fixed version or zero data retention | no limit ever observed on Jev (100 parallel in 1.9 s); Jev is on OpenRouter's ZDR list; `usage.cost` in each response; a low balance makes OpenRouter refuse large requests with 402 `in_flight_budget_exhausted` (seen on writing models) |
-| TypeSafe native | `POST https://api.typesafe.ai/v1/systemone` · `TYPESAFE_API_KEY` (we have none) | — | documented 1,200 req/min; sign-ups closed since 22 Sep 2026 |
-| Vercel AI Gateway | `POST https://ai-gateway.vercel.sh/v1/evaluate`, `model: typesafe-ai/jev` (DOCUMENTED, not tested) | the product, if we choose it | ZDR per request on Pro; AI SDK 7 `experimental_evaluate`; pilot-merge is on AI SDK 6 |
+| TypeSafe native | `POST https://api.typesafe.ai/v1/systemone` · `TYPESAFE_API_KEY` · `jev-latest` | users with a direct TypeSafe account | TESTED 28 Sep 2026: HTTP 200, model `jev-1.13.0`, one Noul returned `0.03`. The 1,200 req/min limit is documented, not load-tested by us. [Signups reopened 28 Sep](https://x.com/typesafeai/status/2104337822350221795) after the [22 Sep pause](https://x.com/typesafeai/status/2102281508950307159). |
+| Vercel AI Gateway | `POST https://ai-gateway.vercel.sh/v1/evaluate`, `model: typesafe-ai/jev` (DOCUMENTED, not tested) | an application already using the Vercel gateway | Check the current AI SDK and data-processing settings in Vercel's documentation before integrating. |
 
-Price everywhere: **$0.042 per million input tokens, output free.** A 500-token text with ten questions costs about two thousandths of a cent.
+Published Jev input price at the time of our tests: **$0.042 per million input tokens, output free.** Check the chosen gateway's current price and fees. A 500-token text with ten questions costs about two thousandths of a cent at that input rate.
 
 ## What a call costs, and why batching saves less on short texts
 
@@ -114,11 +114,11 @@ Every call is billed about **260 input tokens of fixed overhead**, plus the stat
 
 ## Code
 
-The fastest path is the CLI (`tools/jev.py`, see SKILL.md). In Python, import the CLI as a module (it retries on 429, 5xx and timeouts):
+The fastest path is the CLI (`tools/jev.py`, see SKILL.md). In Python, import its call function (it retries on 429, 5xx and timeouts):
 
 ```python
 import os, sys; sys.path.insert(0, os.path.expanduser("~/.claude/skills/jev/tools"))
 import jev                              # reads LLMAPI_API_KEY / OPENROUTER_API_KEY from the environment
-status, data, latency_s, cost_usd = jev.call(state, questions, "llmapi", "my-task", "item-17")   # or "openrouter"
+status, data, latency_s, cost_usd = jev.call(state, questions, "llmapi")   # or "openrouter"
 answers = data["answers"]
 ```
