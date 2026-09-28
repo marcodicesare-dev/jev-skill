@@ -1,6 +1,6 @@
 # Jev skill for Claude Code, Codex and other coding agents
 
-**We ran Jev more than 19,000 times. This is the guide we wish we had before call one.** The [research tally](reference/research-scope.md) records 19,367 successful Jev API responses and 90.4M metered input tokens in 4 days of experiments. The useful part is what survived those tests: 5 copyable recipes, a CLI, failures, and the conditions under which each result held.
+**I tried to make my AI writer cheaper with Jev. The writing got worse.** I kept testing until I understood where the model helped. The [research tally](reference/research-scope.md) records 19,367 successful Jev API responses and 90.4M metered input tokens in 4 days, including retries and reruns. This repo contains the guide, a CLI, 5 measured question sets and the failures that changed how I use them.
 
 Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90M Tokens)**](https://marcodicesare-dev.github.io/jev-skill/) if you want the full story, an honest decision map and a first workflow you can run. The [Markdown version](GUIDE.md) lives here in the repo.
 
@@ -22,11 +22,11 @@ Then ask your agent: **“Use the Jev skill to find one repeated, bounded decisi
 J=~/.claude/skills/jev  # adjust to your install path
 python3 "$J/tools/jev.py" ask \
   --via typesafe \
-  --state '{"review":"The room was quiet, but breakfast was cold."}' \
-  --questions '{"noise":{"type":"noul","instructions":"Does `review` complain about noise?","criteria":{"true":"A noise complaint is present","false":"No noise complaint is present"}}}'
+  --state '{"message":"I was charged twice and need help."}' \
+  --questions "$J/examples/message-routing.json"
 ```
 
-The response includes `answers.noise.noul`, the model name, latency and estimated cost. `--via typesafe` uses the official endpoint with a TypeSafe API key (**live tested: HTTP 200, jev-1.13.0, 28 September**). Without a route flag, the CLI uses the LLM API gateway because that is where most of our experiments ran; it needs `LLMAPI_API_KEY`. `--via openrouter` selects a version-pinned route. TypeSafe [reopened new signups on 28 September](https://x.com/typesafeai/status/2104337822350221795) after a temporary pause. Read [API and route details](reference/api.md) before integrating Jev into an application; check [TypeSafe's live documentation](https://docs.typesafe.ai/) for current contracts and limits.
+This example asks which team should see a customer message first. Read `answers.route.choice` and the probabilities for `billing`, `account` and `other`. Routing the message does not verify that 2 charges happened or approve a refund. This is an illustrative quick start; the 5 measured recipes are indexed below. The response also includes the model name, latency and token usage. `--via typesafe` uses the official endpoint with a TypeSafe API key (**live tested: HTTP 200, jev-1.13.0, 28 September**). Without a route flag, the CLI uses the LLM API gateway used for most experiments; it needs `LLMAPI_API_KEY`. `--via openrouter` selects a version-pinned route. Read [API and route details](reference/api.md) before integrating Jev into an application; check [TypeSafe's live documentation](https://docs.typesafe.ai/) for current contracts and limits.
 
 ## Choose the right job
 
@@ -38,13 +38,13 @@ The response includes `answers.noise.noul`, the model name, latency and estimate
 
 If you already have an AI agent, copy the [workflow audit prompt](AUDIT-YOUR-AGENT.md). It finds candidate decisions in your code and sets up a shadow comparison before any replacement.
 
-## What we tested
+## What I tested
 
-These are **our September 2026 results on our tasks**, not general Jev benchmarks. Denominators and limits are in [capabilities](reference/capabilities.md), the [recipe index](recipes/README.md), and the [research tally](reference/research-scope.md).
+These are **September 2026 results on my tasks**, not general Jev benchmarks. Denominators and limits are in [capabilities](reference/capabilities.md), the [recipe index](recipes/README.md), and the [research tally](reference/research-scope.md).
 
 | Finding | Measured result | Practical lesson |
 |---|---:|---|
-| Let Jev select source notes for an ad writer when the writer could read them all | Full-context ads won 13 comparisons; filtered ads won 3, with 4 ties | Do not filter a writer's material by default. |
+| Let Jev select source notes for an ad writer when the writer could read them all | Full-context ads won 13 comparisons; filtered ads won 3; 4 were inconclusive because the judge changed with reading order | Do not filter a writer's material by default. |
 | Search 30,143 call utterances for known founder instructions | 51 of 54 found with Jev while reading 7% of windows; keyword search found 49 | Use Jev alongside search when the corpus is too large to read whole. |
 | Give keyword classification the top 5 search results | 88.3% → 98.7% accuracy on 300 labelled keywords | Put the evidence a human would check into the state. |
 | Reword a Score option so its name contradicted its description | Exact star ratings fell from 27 to 15 of 40 | Option names are part of the question. |
@@ -63,7 +63,7 @@ The [5 recipes](recipes/README.md) cover keyword intent, review stars and an inj
 - **RAG evidence checks and hallucinated extracted facts:** [claim-versus-source recipe](recipes/claim-vs-source.json) and its [measured limits](recipes/README.md)
 - **Cost, latency, confidence and calibration:** [API notes](reference/api.md), [field results](reference/capabilities.md), [pitfalls](reference/pitfalls.md)
 
-For new model versions, providers and SDK features, prefer [TypeSafe's official docs](https://docs.typesafe.ai/) and [official skill](https://github.com/typesafe-ai/skills). Our dated experiments are useful evidence, not a substitute for checking current behavior.
+For new model versions, providers and SDK features, prefer [TypeSafe's official docs](https://docs.typesafe.ai/) and [official skill](https://github.com/typesafe-ai/skills). My dated experiments are useful evidence; check current behavior before building on them.
 
 ## Who made this
 

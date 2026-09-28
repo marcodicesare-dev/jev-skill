@@ -19,6 +19,9 @@ h1 { max-width: 1050px; margin: 0; font-size: clamp(3rem, 7vw, 6.5rem); line-hei
 article { max-width: 880px; padding-bottom: 5rem; }
 article > p:first-child { width: min(1306px, calc(100vw - 4rem)); max-width: none; margin: 0 0 4rem; }
 article > p:first-child img { display: block; width: 100%; height: auto; border-radius: 3px; }
+article > p > img { display: block; width: 100%; height: auto; border-radius: 3px; }
+article > p:has(> img) { max-width: 880px; margin: 2.5rem 0 2rem; }
+article > p:first-child:has(> img) { max-width: none; margin: 0 0 4rem; }
 article > p, article > ul, article > ol { max-width: 720px; }
 article > p:nth-child(2) { font-size: 1.34rem; line-height: 1.46; letter-spacing: -.014em; }
 article p { margin: 0 0 1.35rem; }

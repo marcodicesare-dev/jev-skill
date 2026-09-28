@@ -11,30 +11,27 @@ description: >-
 
 # Jev decision model: field-tested agent skill
 
-Jev makes focused typed judgments and returns probabilities. It does not write prose. Put it where code needs a semantic decision; keep generation, exact calculation and permissions in other components. These field results were measured in September 2026 on jev-1.13 and may not transfer to a newer model or another domain.
+Your agent reads a message such as “I was charged twice.” It has to choose the billing queue, but it cannot infer from that sentence that 2 charges happened or that a refund is allowed. That is a good shape for Jev: choose among routes your code already permits, then let the right system or person handle the case.
 
-Before building, read the relevant current [TypeSafe documentation](https://docs.typesafe.ai/) for the request shape, limits and chosen primitive. The local [API reference](reference/api.md) records what we tested; it is not the source of truth for a changed provider.
+Jev makes focused typed judgments and returns probabilities. It does not write prose. Use it for repeated choices, scores and source checks; keep writing, exact calculation and permissions in other components. The field results below were measured in September 2026 on jev-1.13 and may not transfer to a newer model or another domain.
+
+Before building, read the relevant current [TypeSafe documentation](https://docs.typesafe.ai/) for the request shape, limits and chosen primitive. The local [API reference](reference/api.md) records what I tested; it is not the source of truth for a changed provider.
 
 ## Call it in one minute
 
 ```bash
-J=~/.claude/skills/jev            # or wherever you installed this folder (Codex: ~/.agents/skills/jev)
-export TYPESAFE_API_KEY=...        # configure locally; never put a real key in source control
-python3 $J/tools/jev.py ask \
-  --via typesafe \
-  --state '{"text": "Colazione ottima, ma la camera dava sulla strada e di notte era rumorosa."}' \
-  --questions '{"noise": {"type": "noul", "instructions": "Does the guest complain about noise?",
-                          "criteria": {"true": "The guest complains about noise", "false": "No complaint about noise"}},
-                "stars": {"type": "score", "instructions": "How many stars did this guest most likely give?",
-                          "criteria": ["1: furious", "2: disappointed", "3: mixed", "4: pleased", "5: delighted"]}}'
-python3 $J/tools/jev.py batch --states items.jsonl --questions questions.json --out answers.jsonl --workers 20
-python3 $J/tools/jev.py ask ... --via openrouter      # version-pinned route; verify current model
-python3 $J/tools/jev.py ask --questions $J/recipes/keyword-intent.json --state '{...}'   # a tested question set
+J=~/.claude/skills/jev  # or your installation path (Codex: ~/.agents/skills/jev)
+# Set TYPESAFE_API_KEY locally; never put the real key in a prompt or commit.
+python3 "$J/tools/jev.py" ask --via typesafe \
+  --state '{"message":"I was charged twice and need help."}' \
+  --questions "$J/examples/message-routing.json"
 ```
 
-Before writing questions from scratch, check **`recipes/`**: tested question sets for keyword intent, review stars plus injection guard, ad quality, and a person's instructions in call transcripts, each with the state it expects and its measured result.
+Read `answers.route.choice` to see the selected queue. This is an **illustrative routing example**, not proof that a support workflow is ready to run without review. Start with labelled messages from your own product, then test the route and the action that follows it. The [full guide](GUIDE.md) shows the measured wins and failures.
 
-Keys come from the environment variables `LLMAPI_API_KEY` (default route) and `OPENROUTER_API_KEY` (`--via openrouter`). Raw HTTP: `POST https://api.llmapi.ai/v1/systemone` with `{"model": "jev-latest", "state": ..., "questions": {...}}`. Exact question shapes, answers, limits, errors: **`reference/api.md`**.
+Before writing questions from scratch, check **`recipes/`** for 5 measured question sets covering keyword intent, review stars plus an injection flag, ad quality, a person's instructions in call transcripts, and claim-versus-source checks. Each tested recipe states the state it expects and the result I observed. `examples/message-routing.json` is a general quick start checked with 1 message, not a measured support recipe.
+
+Keys come from `TYPESAFE_API_KEY` for `--via typesafe`, `LLMAPI_API_KEY` for the default gateway route, or `OPENROUTER_API_KEY` for `--via openrouter`. Raw HTTP for the direct route: `POST https://api.typesafe.ai/v1/systemone` with `{"model": "jev-latest", "state": ..., "questions": {...}}`. Exact question shapes, answers, limits and errors: **`reference/api.md`**.
 
 ## Use it for / not for (measured 24–26 Sep 2026)
 

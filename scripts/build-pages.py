@@ -25,7 +25,9 @@ def main() -> None:
         text=True,
         cwd=ROOT,
     ).stdout
-    rendered = rendered.replace('src="assets/jev-guide-cover.png"', 'src="assets/jev-guide-cover.png" width="2000" height="825" loading="eager"')
+    rendered = rendered.replace('src="assets/jev-guide-cover.png"', 'src="assets/jev-guide-cover.png" width="1983" height="793" loading="eager"')
+    for asset in ("jev-archive.png", "jev-source-check.png"):
+        rendered = rendered.replace(f'src="assets/{asset}"', f'src="assets/{asset}" width="1983" height="793" loading="lazy"')
     rendered = re.sub(
         r'href="(?!https?://|#|mailto:)([^"]+)"',
         lambda match: f'href="{REPO}/blob/main/{match.group(1)}"',
@@ -43,11 +45,11 @@ def main() -> None:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <title>{TITLE} — Marco Di Cesare</title>
-  <meta name="description" content="A practical guide to Jev and TypeSafe System One after 19,367 successful calls: API quickstart, 5 copyable recipes, measured failures, agent patterns, cost and calibration.">
+  <meta name="description" content="I tried to make my AI writer cheaper with Jev. The writing got worse. After 19,367 calls, here is where the decision model helped, failed, and earned a place in an agent.">
   <link rel="canonical" href="{URL}">
   <meta property="og:type" content="article">
   <meta property="og:title" content="{TITLE}">
-  <meta property="og:description" content="We ran Jev 19,367 times. The result that changed how we use it was a failure. Read the tested guide and copy a first workflow.">
+  <meta property="og:description" content="I tried to make my AI writer cheaper with Jev. The writing got worse. Then I gave the model a different job.">
   <meta property="og:url" content="{URL}">
   <meta property="og:image" content="{URL}assets/jev-guide-cover.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -60,7 +62,7 @@ def main() -> None:
   <a class="skip" href="#article">Skip to the guide</a>
   <header class="site-head"><a class="wordmark" href="{URL}">Jev, explained.</a><nav aria-label="Main navigation"><a href="{REPO}">The skill on GitHub ↗</a><a href="{REPO}/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
   <main id="article">
-    <header class="article-head"><h1>{TITLE}</h1><p class="dek">The failures, a runnable call, and 5 questions worth stealing.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026 · Independent research</p></header>
+    <header class="article-head"><h1>{TITLE}</h1><p class="dek">I made my AI writer 37% cheaper. The ads got worse, 13–3. Then Jev found 51 of 54 buried instructions for $0.32.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026</p></header>
     <article>
 {rendered}
     </article>

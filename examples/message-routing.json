@@ -1,0 +1,11 @@
+{
+  "route": {
+    "type": "choice",
+    "instructions": "Which team should receive this customer message first? Choose from the available routes. This only routes the message; it does not verify a charge or authorize a refund.",
+    "criteria": {
+      "billing": { "what": "Questions about charges, invoices, payments or refunds" },
+      "account": { "what": "Login, profile or account access problems" },
+      "other": { "what": "Messages that fit neither team" }
+    }
+  }
+}
