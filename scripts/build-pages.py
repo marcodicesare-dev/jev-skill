@@ -60,7 +60,7 @@ def main() -> None:
 </head>
 <body>
   <a class="skip" href="#article">Skip to the guide</a>
-  <header class="site-head"><a class="wordmark" href="{URL}">Jev, explained.</a><nav aria-label="Main navigation"><a href="{REPO}">The skill on GitHub ↗</a><a href="{REPO}/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
+  <header class="site-head"><nav aria-label="Main navigation"><a href="{REPO}">The skill on GitHub ↗</a><a href="{REPO}/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
   <main id="article">
     <header class="article-head"><h1>{TITLE}</h1><p class="dek">I made my AI writer 37% cheaper. The ads got worse, 13–3. Then Jev found 51 of 54 buried instructions for $0.32.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026</p></header>
     <article>

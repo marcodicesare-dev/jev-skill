@@ -7,9 +7,8 @@ a:hover { color: var(--orange); }
 a:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
 .skip { position: absolute; top: -100px; left: 1rem; z-index: 10; padding: .4rem .7rem; background: var(--paper); }
 .skip:focus { top: 1rem; }
-.site-head { display: flex; justify-content: space-between; align-items: center; gap: 2rem; max-width: 1340px; margin: 0 auto; padding: 1.15rem 2rem; border-bottom: 1px solid var(--line); font-size: .85rem; line-height: 1.3; }
+.site-head { display: flex; justify-content: flex-end; align-items: center; gap: 2rem; max-width: 1340px; margin: 0 auto; padding: 1.15rem 2rem; border-bottom: 1px solid var(--line); font-size: .85rem; line-height: 1.3; }
 .site-head a { text-decoration: none; }
-.wordmark { font-size: 1rem; font-weight: 700; letter-spacing: -.045em; }
 .site-head nav { display: flex; gap: 1.5rem; }
 main { max-width: 1340px; margin: 0 auto; padding: 0 2rem; }
 .article-head { padding: 6rem 0 3.4rem; }
