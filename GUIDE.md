@@ -79,7 +79,13 @@ The interesting construction is **many cheap, typed decisions around a smaller n
 
 These are building hypotheses, not 4 shipped products. The speed of a brick does not prove the house is useful. Start with the customer job, the current alternative, and a test that can actually tell you the idea was wrong.
 
-## Copy this before you change a workflow
+## So what?
+
+Try Jev when your agent repeats a bounded decision: a route, a source check, a score, or a yes/no. Keep code in charge of the legal actions and leave writing and open-ended reasoning with the writing model. In our tests, letting Jev select source notes made the writer worse, 13–3 across 20 comparisons. Asking 1 narrow question of each archive window found 51 of 54 known instructions for $0.32. The model's speed alone did not predict which job improved.
+
+Before replacing a call, run the same cases through both paths and compare errors, human reviews, latency and total provider cost. The measured results above came from our tasks; your threshold needs your own labelled cases.
+
+Here is the short procedure:
 
 ```text
 1. Name the exact decision and the code that consumes it.
