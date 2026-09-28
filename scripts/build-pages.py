@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GUIDE = ROOT / "GUIDE.md"
 OUTPUT = ROOT / "docs" / "index.html"
 REPO = "https://github.com/marcodicesare-dev/jev-skill"
-TITLE = "The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)"
+TITLE = "The Ultimate Guide to Jev (After 19,367 Calls and 90M Tokens)"
 URL = "https://marcodicesare-dev.github.io/jev-skill/"
 
 
@@ -44,7 +44,7 @@ def main() -> None:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <title>{TITLE} — Marco Di Cesare</title>
-  <meta name="description" content="A practical guide to Jev and TypeSafe System One after 19,367 successful calls: first API request, five copyable recipes, measured failures, agent patterns, cost and calibration.">
+  <meta name="description" content="A practical guide to Jev and TypeSafe System One after 19,367 successful calls: API quickstart, 5 copyable recipes, measured failures, agent patterns, cost and calibration.">
   <link rel="canonical" href="{URL}">
   <meta property="og:type" content="article">
   <meta property="og:title" content="{TITLE}">
@@ -61,7 +61,7 @@ def main() -> None:
   <a class="skip" href="#article">Skip to the guide</a>
   <header class="site-head"><a class="wordmark" href="{URL}">Jev, explained.</a><nav aria-label="Main navigation"><a href="{REPO}">The skill on GitHub ↗</a><a href="{REPO}/blob/main/AUDIT-YOUR-AGENT.md">Audit your agent ↗</a></nav></header>
   <main id="article">
-    <header class="article-head"><h1>{TITLE}</h1><p class="dek">The failures, the first call, and the five questions worth stealing.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026 · Independent research</p></header>
+    <header class="article-head"><h1>{TITLE}</h1><p class="dek">The failures, a runnable call, and 5 questions worth stealing.</p><p class="byline">By <a href="https://x.com/marcodice_ai">Marco Di Cesare</a> · 28 September 2026 · Independent research</p></header>
     <article>
 {rendered}
     </article>

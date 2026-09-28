@@ -2,7 +2,7 @@
 
 *The chess lesson: Jev cannot "play", but a program that lists the legal moves and asks Jev to pick one each turn plays a whole game (an independent test: 80 games, zero illegal moves, 12 cents). The code drives; Jev chooses the move.*
 
-## Four questions before any design
+## 4 questions before any design
 
 1. **What is the position?** The text Jev reads at this step (keep it ≤ 32k tokens with the question).
 2. **Who produces the legal moves?** Code, a fixed list, a set of records, or a writing model. Jev only chooses among them, so it never invents one.
@@ -27,7 +27,7 @@
 
 **Receipt guard (measured 26 Sep 2026).** When a pipeline extracts a value from a page (a score, a count, an award, an hour), ask Jev whether the page's own text states it: one Choice per value, «supported / contradicted / not addressed», over every chunk of the receipt's markdown. The value enters the record only if some chunk supports it and none contradicts it. It stopped the week's invented facts: a 9.5 extracted from a bot-blocked page of 223 characters, and a MICHELIN score and Keys extracted from a list page that never names the hotel. Both true controls passed. It does not catch loose paraphrase («sopra Barga» against «a Barga»), and it works per value against the receipt that value declares: checking a whole page against every receipt flagged 57 % of the sentences and caught only 2 of 5 known-wrong ones. Recipe: `recipes/claim-vs-source.json` (measured in our lab, September 2026).
 
-**Ledger reader (measured 26 Sep 2026).** To find what a person asked for across long transcripts, cut them into overlapping windows of about six utterances, relabel speakers (Founder / Other), scrub names, and ask one Noul («does the Founder give an instruction, decision, preference or rejection about X?») plus a Choice for the area. Then read in full only the flagged windows. On 14 calls it found 51 of 54 known inputs against 49 for keyword search, while reading half as many windows, and reading its flags turned up 10 inputs the first reading had missed. Recipe: `recipes/founder-inputs-from-transcripts.json`.
+**Ledger reader (measured 26 Sep 2026).** To find what a person asked for across long transcripts, cut them into overlapping windows of about 6 utterances, relabel speakers (Founder / Other), scrub names, and ask one Noul («does the Founder give an instruction, decision, preference or rejection about X?») plus a Choice for the area. Then read in full only the flagged windows. On 14 calls it found 51 of 54 known inputs against 49 for keyword search, while reading half as many windows, and reading its flags turned up 10 inputs the first reading had missed. Recipe: `recipes/founder-inputs-from-transcripts.json`.
 
 **Speculative questions (TypeSafe's fan-out).** When a follow-up matters only for some answers ("if the guest asks about the spa, which treatment?"), ask it in the first call with its premise written into the question, and let the code use it only when the premise holds. Make a second call only when an earlier answer is needed to fetch evidence, build a new state or set the next options. Extra questions do not change the other answers (tested 28 Sep 2026), so the only price is their tokens.
 
@@ -39,7 +39,7 @@
 
 ## The pattern that failed: the eyes
 
-Letting Jev choose what the author reads (sources, facts, photos) before the author writes. In our test where all 44 notes fit, it saved money on the writer's input and made the writing worse (13–3 against full context, four ties). Jev can check the author's output or triage an archive too large to read in one call. Do not narrow a writer's already readable context without comparing the resulting work.
+Letting Jev choose what the author reads (sources, facts, photos) before the author writes. In our test where all 44 notes fit, it saved money on the writer's input and made the writing worse (13–3 against full context, 4 ties). Jev can check the author's output or triage an archive too large to read in one call. Do not narrow a writer's already readable context without comparing the resulting work.
 
 ## A worked example: the content engine
 
@@ -55,4 +55,4 @@ Letting Jev choose what the author reads (sources, facts, photos) before the aut
 2. Run the current step and Jev on the same items; for disagreements use a blind judge (both orders) or people.
 3. Report quality, time and cost together, with a confidence interval (a bootstrap over the items is enough).
 4. Adopt only if quality rises at equal cost and time, or cost and time fall at equal quality, and never at the expense of the writer's context.
-5. For every failure, keep the state, the questions and the answers, and file it as **missing evidence** (the state lacked what a person would need), **model error**, **code error** (wrong option set, composition or threshold) or **service failure** (TypeSafe's skill). Only model errors count against Jev; the other three are ours to fix.
+5. For every failure, keep the state, the questions and the answers, and file it as **missing evidence** (the state lacked what a person would need), **model error**, **code error** (wrong option set, composition or threshold) or **service failure** (TypeSafe's skill). Only model errors count against Jev; the other 3 are ours to fix.

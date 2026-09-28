@@ -14,4 +14,4 @@ The totals include experiments with multiple questions per request. A call is **
 
 The experiments covered ads, reviews, keyword intent, source checks, call transcript search and bounded agent decisions. Most used jev-1.13 through LLM API's `jev-latest` or a pinned OpenRouter route. Model, gateway and prices may change. Check [the live TypeSafe docs](https://docs.typesafe.ai/) and validate thresholds on your own labelled cases.
 
-Our Claude Code session also recorded about 1.01 billion token accesses, but roughly 999 million were cached input rereads. We do **not** describe that as a billion unique research tokens or use it as the headline.
+Our Claude Code session also recorded about 1.01B token accesses, but roughly 999M were cached input rereads. We do **not** describe that as 1B unique research tokens or use it as the headline.

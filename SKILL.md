@@ -39,7 +39,7 @@ Keys come from the environment variables `LLMAPI_API_KEY` (default route) and `O
 **Use Jev for**
 - routing a request to one of many prepared answers or paths (98.8 %);
 - checking rules written as crisp questions (brand rules: 22 of 27 injected violations found, few false alarms, 12 rules in 0.3 s);
-- grading quality when differences are real (four versions of an ad from best to broken: order right in 30 of 30);
+- grading quality when differences are real (4 versions of an ad from best to broken: order right in 30 of 30);
 - many questions on one text: profiles, extraction, presence checks (150 questions per hotel in 0.7 s for $0.0012);
 - deciding inside an agent whose steps the code owns (directory agent: 91 % of facts right, 1.6 s of decisions per hotel);
 - triage with the evidence in the state (keywords: rules 84 %, Jev with Google results 99 %);

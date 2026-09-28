@@ -1,16 +1,16 @@
-# The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)
+# The Ultimate Guide to Jev (After 19,367 Calls and 90M Tokens)
 
 ![An illustrated Jev decision at the edge of a larger system](assets/jev-guide-cover.png)
 
-I spent four days trying to work out where Jev actually belongs in an AI system. The count in the title is from our logs: **19,367 successful API responses and 90.4 million metered input tokens**, including retries and reruns. It is the size of the investigation, not a claim that every call was a different experiment. [Here's how I counted it.](reference/research-scope.md)
+I spent 4 days trying to work out where Jev actually belongs in an AI system. The count in the title is from our logs: **19,367 successful API responses and 90.4M metered input tokens**, including retries and reruns. It is the size of the investigation, not a claim that every call was a different experiment. [Here's how I counted it.](reference/research-scope.md)
 
-The first expensive lesson was a failure. I let Jev choose which source notes an ad writer could see. The writer with *all* the notes won 13 of 20 comparisons; the writer with Jev's selection won three, and four tied. The apparently clever optimization removed details the writer needed. The next day, Jev helped us search 30,143 utterances of old calls in 108 seconds for $0.32, finding 51 of 54 known instructions while we read only 7% of the windows. Same model. Different job.
+The first expensive lesson was a failure. I let Jev choose which source notes an ad writer could see. The writer with *all* the notes won 13 of 20 comparisons; the writer with Jev's selection won 3, and 4 tied. The apparently clever optimization removed details the writer needed. The next day, Jev helped us search 30,143 utterances of old calls in 108 seconds for $0.32, finding 51 of 54 known instructions while we read only 7% of the windows. Same model. Different job.
 
 So here is the useful question: **Which small decisions are you currently paying a writing model to make, and which ones should stay with the writer?** This guide gives you an answer you can test in your own workflow, plus the command, question sets and failures we wish we had seen first.
 
 ## What Jev does in one minute
 
-Jev is TypeSafe's *decision* model. Give it one `state` (text or a JSON object) and up to 256 focused questions about that same state. It returns one of three typed answers:
+Jev is TypeSafe's *decision* model. Give it one `state` (text or a JSON object) and up to 256 focused questions about that same state. It returns one of 3 typed answers:
 
 | Ask for | Jev returns | A real use |
 |---|---|---|
@@ -43,23 +43,23 @@ python3 "$J/tools/jev.py" ask \
 
 Look at `answers.noise.noul` and `model` in the response. The question ID is for your code; the full question belongs in `instructions`. A probability near 1 means the model strongly leans yes. **It does not mean the answer is right that often on your data.** Our [API reference](reference/api.md) has exact Choice, Score and Noul shapes, limits and errors.
 
-## The three places I would look first
+## The 3 places I would look first
 
 **1. A repeated closed decision inside an agent.** Find a call that returns a category, score or yes/no, where the available moves are known before the model runs. Have code enumerate the legal options. Ask Jev to pick. Keep a fallback and compare its answers against labelled examples before replacing anything. This is the same construction behind the “Jev plays chess” demonstrations: code supplies legal moves; Jev chooses one. Jev is not calculating chess.
 
 **2. A large collection nobody reads end to end.** Split documents, reviews or transcripts into overlapping pieces. Ask the *same* narrow question of each piece and read the flagged ones. We found 51 of 54 known instructions in our call archive that way; keyword search found 49, and their union found 53. The win was not that Jev “understood our company.” It turned an archive too big to inspect into a shorter reading queue. Keep keyword search beside it because both missed something.
 
-**3. A claim that should point back to its source.** Save the source text beside every extracted value, then ask whether that specific value is supported, contradicted or absent. In a small incident test, this flagged three invented hotel facts and passed two true controls. One invented rating came from a saved page that was only a 223-character bot check. A simple page-length check should have caught that *before* Jev ran. The [claim-versus-source recipe](recipes/claim-vs-source.json) is a starting point, not a universal fact checker; a loose geographic paraphrase still passed in our test.
+**3. A claim that should point back to its source.** Save the source text beside every extracted value, then ask whether that specific value is supported, contradicted or absent. In a small incident test, this flagged 3 invented hotel facts and passed 2 true controls. One invented rating came from a saved page that was only a 223-character bot check. A simple page-length check should have caught that *before* Jev ran. The [claim-versus-source recipe](recipes/claim-vs-source.json) is a starting point, not a universal fact checker; a loose geographic paraphrase still passed in our test.
 
 If you want your agent to find candidate callsites, [paste this audit prompt into it](AUDIT-YOUR-AGENT.md). It asks for code locations, actual frequency and cost, a bounded Jev question, and a shadow comparison. It also permits the right answer: keep the current system.
 
 ## The mistakes that mattered more than the benchmark wins
 
-**Don't let Jev preselect a writer's readable material.** In our 20-ad comparison, the full-context writer won 13–3 with four ties. Jev can check a draft *after* the writer has used the sources, if the check is a narrow rule. It could help select from an archive that will never fit in the writer's context; it hurt when 44 notes already fit.
+**Don't let Jev preselect a writer's readable material.** In our 20-ad comparison, the full-context writer won 13–3 with 4 ties. Jev can check a draft *after* the writer has used the sources, if the check is a narrow rule. It could help select from an archive that will never fit in the writer's context; it hurt when 44 notes already fit.
 
-**Put the evidence you would inspect into the state.** On 300 labelled hotel search terms, keyword-only classification reached 88.3%. With the top five search results in the state, it reached 98.7%. Those results cost money to fetch and can be noisy. The lesson is to measure the *whole evidence path*, not celebrate the Jev call alone.
+**Put the evidence you would inspect into the state.** On 300 labelled hotel search terms, keyword-only classification reached 88.3%. With the top 5 search results in the state, it reached 98.7%. Those results cost money to fetch and can be noisy. The lesson is to measure the *whole evidence path*, not celebrate the Jev call alone.
 
-**Write option names as carefully as the descriptions.** We gave a star-rating question five options, then deliberately renamed the keys to contradict their descriptions. Exact answers fell from 27 to 15 of 40. Neutral keys were fine. The [API reference](reference/api.md) shows the shape; a key is not invisible metadata.
+**Write option names as carefully as the descriptions.** We gave a star-rating question 5 options, then deliberately renamed the keys to contradict their descriptions. Exact answers fell from 27 to 15 of 40. Neutral keys were fine. The [API reference](reference/api.md) shows the shape; a key is not invisible metadata.
 
 **One text per call; many questions about that text.** When we packed several reviews into one state, 8–34% of answers changed across the tested setups. Packing questions about one review preserved answers in our test and saved about 4× on short reviews. TypeSafe measured a larger saving on a long article; your text length changes the economics. [See the measurements.](reference/api.md#what-a-call-costs-and-why-batching-saves-less-on-short-texts)
 
@@ -74,9 +74,9 @@ The interesting construction is **many cheap, typed decisions around a smaller n
 - **An archive you can ask new questions of tomorrow.** Tag every review or document with a new semantic question, then count, group or retrieve the matching source records. For a count, calibrate first; summing overconfident probabilities can inflate rare events.
 - **A brand that remembers corrections.** Turn a human correction into a narrowly worded check over future drafts, and show the reviewer the sentence that triggered it. We tested rule checks in isolation; a continuously learning brand workflow remains a product hypothesis.
 - **A live interface that reacts to meaning.** A form or support desk could select a prepared next step as a person speaks or types, without waiting for a prose answer at every turn. We measured the speed of the individual decisions; we have not proved a customer interaction works better.
-- **Pages assembled from approved pieces for a specific need.** We tested one version on 40 hotel searches. A blind model judge preferred 38 assembled pages to a generic hotel homepage, but about a third mixed pieces poorly, the comparison was weak, and no real visitor outcome was measured. The product question remains open.
+- **Pages assembled from approved pieces for a specific need.** We tested one version on 40 hotel searches. A blind model judge preferred 38 assembled pages to a generic hotel homepage, but about 1/3 mixed pieces poorly, the comparison was weak, and no real visitor outcome was measured. The product question remains open.
 
-These are building hypotheses, not four shipped products. The speed of a brick does not prove the house is useful. Start with the customer job, the current alternative, and a test that can actually tell you the idea was wrong.
+These are building hypotheses, not 4 shipped products. The speed of a brick does not prove the house is useful. Start with the customer job, the current alternative, and a test that can actually tell you the idea was wrong.
 
 ## Copy this before you change a workflow
 
@@ -89,7 +89,7 @@ These are building hypotheses, not four shipped products. The speed of a brick d
 6. Change the path only when it wins on the job you actually have.
 ```
 
-The [five tested question sets](recipes/README.md) and [agent audit prompt](AUDIT-YOUR-AGENT.md) let you start today. The [capability notes](reference/capabilities.md) show denominators and limits for the numbers above. If your experiment contradicts ours, send the state shape, question, expected answer and model version in an issue, with private data removed. That would make this guide better than another round of Jev hype.
+The [5 tested question sets](recipes/README.md) and [agent audit prompt](AUDIT-YOUR-AGENT.md) let you start today. The [capability notes](reference/capabilities.md) show denominators and limits for the numbers above. If your experiment contradicts ours, send the state shape, question, expected answer and model version in an issue, with private data removed. That would make this guide better than another round of Jev hype.
 
 ---
 

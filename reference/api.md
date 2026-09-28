@@ -17,10 +17,10 @@ Authorization: Bearer <key>
 ```
 
 - **state**: the text Jev reads. A string or a JSON object. State + the longest question ≤ **32,000 tokens**; the whole request ≤ 64,000.
-- **questions**: up to **256** per call, answered in parallel and independently of each other. Twelve questions asked together, one per call, in reverse order or each under another question's id gave the same answers, within the jitter of two identical calls (28 Sep 2026, 40 reviews; measured in our lab). Output is not billed; what a call costs is below.
+- **questions**: up to **256** per call, answered in parallel and independently of each other. Twelve questions asked together, one per call, in reverse order or each under another question's id gave the same answers, within the jitter of 2 identical calls (28 Sep 2026, 40 reviews; measured in our lab). Output is not billed; what a call costs is below.
 - Write questions and options **in English**, whatever the language of the state (Italian state + English questions: 82.1 %; Italian questions: 79.5 %).
 
-## The three question types (exact shapes that worked)
+## The 3 question types (exact shapes that worked)
 
 **Choice** — pick one of up to 255 options.
 ```json
@@ -83,7 +83,7 @@ TypeSafe's own rules (their agent skill, v0.5.7), with what we measured on them:
 | TypeSafe native | `POST https://api.typesafe.ai/v1/systemone` · `TYPESAFE_API_KEY` · `jev-latest` | users with a direct TypeSafe account | TESTED 28 Sep 2026: HTTP 200, model `jev-1.13.0`, one Noul returned `0.03`. The 1,200 req/min limit is documented, not load-tested by us. [Signups reopened 28 Sep](https://x.com/typesafeai/status/2104337822350221795) after the [22 Sep pause](https://x.com/typesafeai/status/2102281508950307159). |
 | Vercel AI Gateway | `POST https://ai-gateway.vercel.sh/v1/evaluate`, `model: typesafe-ai/jev` (DOCUMENTED, not tested) | an application already using the Vercel gateway | Check the current AI SDK and data-processing settings in Vercel's documentation before integrating. |
 
-Published Jev input price at the time of our tests: **$0.042 per million input tokens, output free.** Check the chosen gateway's current price and fees. A 500-token text with ten questions costs about two thousandths of a cent at that input rate.
+Published Jev input price at the time of our tests: **$0.042 per 1M input tokens, output free.** Check the chosen gateway's current price and fees. A 500-token text with 10 questions costs about $0.00002 at that input rate.
 
 ## What a call costs, and why batching saves less on short texts
 

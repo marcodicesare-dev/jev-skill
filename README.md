@@ -1,10 +1,10 @@
 # Jev skill for Claude Code, Codex and other coding agents
 
-**We ran Jev more than 19,000 times. This is the guide we wish we had before call one.** The [research tally](reference/research-scope.md) records 19,367 successful Jev API responses and 90.4 million metered input tokens in four days of experiments. The useful part is what survived those tests: five copyable recipes, a CLI, failures, and the conditions under which each result held.
+**We ran Jev more than 19,000 times. This is the guide we wish we had before call one.** The [research tally](reference/research-scope.md) records 19,367 successful Jev API responses and 90.4M metered input tokens in 4 days of experiments. The useful part is what survived those tests: 5 copyable recipes, a CLI, failures, and the conditions under which each result held.
 
-Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90 Million Tokens)**](https://marcodicesare-dev.github.io/jev-skill/) if you want the full story, an honest decision map and a first workflow you can run. The [Markdown version](GUIDE.md) lives here in the repo.
+Start with [**The Ultimate Guide to Jev (After 19,367 Calls and 90M Tokens)**](https://marcodicesare-dev.github.io/jev-skill/) if you want the full story, an honest decision map and a first workflow you can run. The [Markdown version](GUIDE.md) lives here in the repo.
 
-[Jev](https://docs.typesafe.ai/) takes a `state` and focused questions and returns typed answers: **Choice** (one option), **Score** (a described scale), or **Noul** (yes/no). It does not write prose. Your code decides what to do with its answers. This repository adds a standard-library Python CLI, five tested question sets, and measurements from real work. It is an independent community project, [not TypeSafe's official skill](https://github.com/typesafe-ai/skills).
+[Jev](https://docs.typesafe.ai/) takes a `state` and focused questions and returns typed answers: **Choice** (one option), **Score** (a described scale), or **Noul** (yes/no). It does not write prose. Your code decides what to do with its answers. This repository adds a standard-library Python CLI, 5 tested question sets, and measurements from real work. It is an independent community project, [not TypeSafe's official skill](https://github.com/typesafe-ai/skills).
 
 ## Install the Jev agent skill
 
@@ -45,12 +45,12 @@ These are **our September 2026 results on our tasks**, not general Jev benchmark
 |---|---:|---|
 | Let Jev select source notes for an ad writer when the writer could read them all | Full-context ads won 13 comparisons; filtered ads won 3, with 4 ties | Do not filter a writer's material by default. |
 | Search 30,143 call utterances for known founder instructions | 51 of 54 found with Jev while reading 7% of windows; keyword search found 49 | Use Jev alongside search when the corpus is too large to read whole. |
-| Give keyword classification the top five search results | 88.3% → 98.7% accuracy on 300 labelled keywords | Put the evidence a human would check into the state. |
+| Give keyword classification the top 5 search results | 88.3% → 98.7% accuracy on 300 labelled keywords | Put the evidence a human would check into the state. |
 | Reword a Score option so its name contradicted its description | Exact star ratings fell from 27 to 15 of 40 | Option names are part of the question. |
-| Compare four quality levels of the same ad | Correct ordering on 30 of 30; near chance among four good variants | Test with real contrasts before calling a judge useful or useless. |
+| Compare 4 quality levels of the same ad | Correct ordering on 30 of 30; near chance among 4 good variants | Test with real contrasts before calling a judge useful or useless. |
 | Check probability against observed accuracy | Top band: 98.6% stated, 84.8% right across 138 claim checks | Calibrate on labelled cases before automatic pass lines. |
 
-The [five recipes](recipes/README.md) cover keyword intent, review stars and an injection flag, ad quality, transcript search, and claim-versus-source checks. Each recipe declares its required state and test. The injection flag caught simple planted strings, but it is **not** a security boundary.
+The [5 recipes](recipes/README.md) cover keyword intent, review stars and an injection flag, ad quality, transcript search, and claim-versus-source checks. Each recipe declares its required state and test. The injection flag caught simple planted strings, but it is **not** a security boundary.
 
 ## Jev guide by task
 

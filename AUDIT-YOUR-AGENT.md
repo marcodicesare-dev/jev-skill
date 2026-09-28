@@ -2,7 +2,7 @@
 
 Most coding agents can find a place to call a new model. The harder question is whether that call improves the workflow. Paste the prompt below into an agent that can inspect your repository. It asks for a **shadow test**, so the current path keeps running until you have evidence.
 
-> Read https://github.com/marcodicesare-dev/jev-skill/blob/main/SKILL.md and inspect this repository's real AI workflow. Find at most three repeated steps where a model currently returns a bounded decision: a yes/no, one of known options, or a score with defined levels. Quote the actual callsite and output contract for each.
+> Read https://github.com/marcodicesare-dev/jev-skill/blob/main/SKILL.md and inspect this repository's real AI workflow. Find at most 3 repeated steps where a model currently returns a bounded decision: a yes/no, one of known options, or a score with defined levels. Quote the actual callsite and output contract for each.
 >
 > Rank those steps by their likely effect on this workflow. Use observed call counts, token usage and latency if available; write “unknown” where they are not. Exclude writing, open-ended reasoning, arithmetic, permission grants and any step where an incorrect answer has no review or rollback path. Do not assume Jev saves money just because its price per token is lower.
 >
@@ -20,7 +20,7 @@ Most coding agents can find a place to call a new model. The harder question is 
 
 The most useful result may be **“keep the current path.”** In our own work, using Jev to narrow a writer's already readable source material made 20 ads worse; using it to search a transcript archive too large to read helped. The difference was the job, not a magic prompt.
 
-## Three decisions from our own workflow
+## 3 decisions from our own workflow
 
 | Decision we considered | What the comparison showed | Result |
 |---|---|---|
