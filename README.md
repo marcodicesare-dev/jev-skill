@@ -59,7 +59,7 @@ These are **September 2026 results on my tasks**, not general Jev benchmarks. De
 | Let Jev select source notes for an ad writer when the writer could read them all | Full-context ads won 13 comparisons; filtered ads won 3; 4 were inconclusive because the judge changed with reading order | Do not filter a writer's material by default. |
 | Search 30,143 call utterances for known founder instructions | 51 of 54 found with Jev while reading 7% of windows; keyword search found 49 | Use Jev alongside search when the corpus is too large to read whole. |
 | Give keyword classification the top 5 search results | 88.3% → 98.7% accuracy on 300 labelled keywords | Put the evidence a human would check into the state. |
-| Reword a Score option so its name contradicted its description | Exact star ratings fell from 27 to 15 of 40 | Option names are part of the question. |
+| Reword a Choice option so its name contradicted its description | Exact star ratings fell from 27 to 15 of 40 | Option names are part of the question. |
 | Compare 4 quality levels of the same ad | Correct ordering on 30 of 30; near chance among 4 good variants | Test with real contrasts before calling a judge useful or useless. |
 | Check probability against observed accuracy | Top band: 98.6% stated, 84.8% right across 138 claim checks | Calibrate on labelled cases before automatic pass lines. |
 
